@@ -1,0 +1,31 @@
+.one {
+  background-color:rgb(47, 90, 170) ;
+  padding:15px
+
+}
+.one nav {
+    display:flex;
+    justify-content:right ;
+  
+}
+.one nav a {
+      margin:0 15px;
+      color:rgb(255, 255, 255);
+      font-weight:bold;
+}
+.one nav a:hover{
+    color: #007bff;
+}
+.two {
+  background-color:rgb(47, 90, 170) ;
+  padding:15px
+  
+  
+
+}
+.two h1{
+    color:#ffffff
+}
+.two p {
+    color:#ffffff
+}
