@@ -23,7 +23,7 @@
 <label for="">LastName:</label><br>
 <input type="text" name="lname"><br>
  <label for="">Date Of Birth</label><br>
- <input type="date"><br>
+ <input type="date" name="dob"><br>
 <label for="">Age:</label><br>
 <input type="text" name="age"><br>
 
