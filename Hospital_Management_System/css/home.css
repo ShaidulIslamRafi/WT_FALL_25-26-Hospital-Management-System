@@ -18,14 +18,17 @@
 }
 .two {
   background-color:rgb(47, 90, 170) ;
-  padding:15px
-  
-  
+  padding:15px;
+  min-height:100vh;
+    
 
 }
 .two h1{
-    color:#ffffff
+    color:#ffffff;
 }
 .two p {
-    color:#ffffff
+    color:#ffffff;
+}
+body{
+    overflow:hidden;
 }

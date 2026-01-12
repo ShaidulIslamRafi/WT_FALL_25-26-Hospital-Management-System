@@ -8,19 +8,19 @@
 
 <div class="one">
 <nav>
-  <a href="">Login</a>
-  <a href="">Sing Up</a>
+  <a href="loginPage.php">Login</a>
+  <a href="registrationPage.php">Sing Up</a>
 </nav>    
-</div><br> <br>
+</div><br>
 <div class="two">
     
     <h1>Hospital Management System </h1>
     <p>Comprehensiv tracking Doctors details </p>
     <p>Set appointment with doctor</p>
     <p>Store patient record</p>
-    <button name="login" onclick="loginPage.php">Login</button>
-    <button name="signup">Sign up</button>
+  
 </div>
+
 
 
 </body>    

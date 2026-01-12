@@ -22,17 +22,55 @@
 <input type="text" name="fname"><br>
 <label for="">LastName:</label><br>
 <input type="text" name="lname"><br>
+ <label for="">Date Of Birth</label><br>
+ <input type="date"><br>
 <label for="">Age:</label><br>
 <input type="text" name="age"><br>
-<label for="">Blood Group:</label> <br>
-<input type="text" name="bgroup"> <br>
-<label for="">UserName/Email:</label> <br>
+
+
+<label for="">Blood Group</label> <br>
+<select name="blood" id="blood" style=" display:block;
+    margin-left:100px;
+    margin-bottom:0px;
+    padding:8px;
+    width:54%;
+    border:1px solid rgba(60, 60, 65, 1);
+    border-radius:10px">
+   <option value="">Blood Group</option>
+  <option value="A+">A+</option>
+  <option value="A-">A-</option>
+  <option value="B+">B+</option>
+  <option value="B-">B-</option>
+  <option value="AB+">AB+</option>
+  <option value="AB-">AB-</option>
+  <option value="O+">O+</option>
+  <option value="O-">O-</option>
+</select><br>
+
+
+
+<label for="">Username/Email:</label> <br>
 <input type="email" name="uname"><br>
 <label for="">Password:</label> <br>
 <input type="text" name="password"><br>
 <label for="">Confirm Password:</label> <br>
 <input type="text" name="cpassword"><br>
-<input type="submit" name="submit" value="Submit"><br>
+<input type="submit" name="submit" value="Submit" style="background-color: #2b5ec5ff;
+                                              color:white;
+                                              width:54%;
+                                              height:35px;
+                                              position:absolute;
+                                              left:0%;
+                                              top:86%;
+                                              border-radius: 10px;"><br>
+<input type="submit" name="back" value="Back" style="background-color: rgb(77, 96, 133);
+                                              color:white;
+                                              width:54%;
+                                              height:35px;
+                                              position:absolute;
+                                              left:0%;
+                                              top:92%;
+                                              border-radius: 10px;"><br>
 
 
 

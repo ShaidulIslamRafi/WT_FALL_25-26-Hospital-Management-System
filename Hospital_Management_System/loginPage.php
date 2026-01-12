@@ -23,9 +23,16 @@
    <input type="text" placeholder="UserName" ><br><br><br>
    <label for="">Password:</label><br>
    <input type="text " placeholder="Password"><br><br>
-   <button >Login</button>
-   <label for=""style="position:absolute;top:80%;">Don`t have an account</label>
-  
+   <input type="submit" name="submit" value="LogIn" style="background-color: #2b5ec5ff;
+                                              color:white;
+                                              width:55%;
+                                              height:35px;
+                                              position:absolute;
+                                              left: 22%;
+                                              top:60%;
+                                              border-radius: 10px;" >
+   <label for=""style="position:absolute;top:70%;">Don`t have an account</label>
+  <a href="registrationPage.php">Sign up</a>
   </form>  
 
 
