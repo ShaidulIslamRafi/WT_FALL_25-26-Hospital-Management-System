@@ -1,3 +1,29 @@
+<?php
+    session_start();
+    include "database.php";
+  $error="";
+if(isset($_POST["submit"])){
+  $username=$_POST["username"];
+  $password=$_POST["password"];
+  
+   $sql="SELECT * FROM admin WHERE 'username'=?  AND 'password'=? ";
+   if($conn->query($sql)===TRUE){
+
+   $_SESSION["username"]=$_POST["username"];
+   $_SESSION["password"]=$_POST["password"];
+   if(isset($_POST["username"]) && isset($_POST["password"]) )
+
+      setcookie("usrname","password",time()+(86400*7),"/");
+
+   }
+   if($_POST["usertype"] =="admin" ){
+    header("Location:dashboard.php");
+   }
+   exit;
+   
+}
+?>
+
 <!DOCTYPE html>
 <html>
 
