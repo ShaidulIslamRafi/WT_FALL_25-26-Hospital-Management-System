@@ -55,6 +55,19 @@
 <input type="text" name="password"><br>
 <label for="">Confirm Password:</label> <br>
 <input type="text" name="cpassword"><br>
+<label for="">Select User:</label> <br>
+
+<div class="radio_b"> 
+   <label class="radio_i"> <input type="radio" name="r_admin" value="admin">Admin  </label>
+
+   <label class="radio_i"> <input type="radio" name="r_patient">Patient  </label>
+
+  <label class="radio_i"> <input type="radio" name="r_doctor">Doctor  </label> 
+
+   <label class="radio_i"> <input type="radio" name="r_nurse">Nurse </label>
+
+</div>
+
 <input type="submit" name="submit" value="Submit" style="background-color: #2b5ec5ff;
                                               color:white;
                                               width:54%;

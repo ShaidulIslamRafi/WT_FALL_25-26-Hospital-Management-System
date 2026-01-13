@@ -92,10 +92,16 @@
                 <tr>
                     <td>Name</td>
                     <td>Title</td>
-                    
-                </tr>
+                    <td>Status</td>
+                    <td>Role</td>
 
+                </tr>
             </thead>
+            <tbody>
+                <tr>
+                    <td> </td>
+                </tr>
+            </tbody>
         </table>
        </div>
 
