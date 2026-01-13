@@ -1,6 +1,8 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
-
+       
+                
+                   /* work on sidebar-->*/
 *{
     margin:0;
     padding:0;
@@ -64,12 +66,12 @@ body{
 
 
 
-
+ /*work on rightside uper*/
 
 
 
 .inteface{
-    
+    margin-top: 20px; 
     margin-left: 310px;
     width:calc(100% - 301px);
     
@@ -127,3 +129,66 @@ body{
 
 
 }
+          /*work on rightside middle*/
+
+
+.iname{
+    color:#444a53;
+    padding: 30px 30px 0 30px;
+    font-size:24px;
+    font-weight:700;
+}
+.value{
+    padding: 30px 30px 0 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    flex-wrap: wrap;
+
+}
+.value .box{
+    background:hsl(0, 3%, 94%);
+    width:235px;
+    padding:16px 20px;
+    border-radius:5px;
+    display:flex;
+    justify-content:flex-start ;
+    align-items:center;
+
+}
+.value .box i{
+    font-size:25px;
+    width:60px;
+    height:60px;
+    line-height:60px;
+    border-radius: 50%;
+    text-align: center;
+    color: #ffffff;
+    margin-right:15px;
+
+}
+.value .box:nth-child(1) i{
+         background-color: #594ef7;
+}
+.value .box:nth-child(2) i{
+         background-color: #594ef7;
+}
+.value .box:nth-child(3) i{
+         background-color: #594ef7;
+}.value .box:nth-child(4) i{
+         background-color: #594ef7;
+}
+
+.value .box h3{
+    font-size:18px;
+    font-weight:600;
+
+}
+.value .box span{
+    font-size:18px;
+   color:#a09b9b;
+    
+}
+
+             /*work on rightside lower*/
+

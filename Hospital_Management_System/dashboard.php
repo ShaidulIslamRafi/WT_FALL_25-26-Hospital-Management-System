@@ -12,7 +12,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    
+
+                   <!-- work on sidebar-->
+
 <div class="containerone"> 
 <section class="main">
     <div class="logo">
@@ -31,7 +33,8 @@
 </section>
 </div>
 
-
+                          
+                   <!-- work on rightside uper-->
 
 
 <div class="containertwo"> 
@@ -49,9 +52,54 @@
                 
             </div>
     </div>
-    <h3 class="dashboard">
-    Dashboard
-    </h3>
+    <h3 class="dashname"> Dashboard </h3>
+               <!-- work on rightside middle-->
+    <div class="value">
+        <div class="box">
+            <i class="fas fa-users"></i>
+            <div>
+                <h3>22</h3>
+                <span>Doctors</span>
+            </div>
+        </div>
+         <div class="box">
+            <i class="fas fa-users"></i>
+            <div>
+                <h3>22</h3>
+                <span>Patients</span>
+            </div>
+        </div>
+         <div class="box">
+            <i class="fas fa-users"></i>
+            <div>
+                <h3>22</h3>
+                <span>NewBooking</span>
+            </div>
+        </div>
+         <div class="box">
+            <i class="fas fa-users"></i>
+            <div>
+                <h3>22</h3>
+                <span>Today</span>
+            </div>
+        </div>
+    </div>
+
+                       <!-- work on rightside lower-->
+       <div class="board">
+        <table width="100%">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Title</td>
+                    
+                </tr>
+
+            </thead>
+        </table>
+       </div>
+
+
 </section>
 
 </div>
