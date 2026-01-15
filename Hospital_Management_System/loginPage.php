@@ -6,21 +6,26 @@ if(isset($_POST["submit"])){
   $username=$_POST["username"];
   $password=$_POST["password"];
   
-   $sql="SELECT * FROM admin WHERE 'username'=?  AND 'password'=? ";
-   if($conn->query($sql)===TRUE){
+   $sql="SELECT * FROM admin WHERE `Username/Email`=?  AND `Password`=?" ;
+   $statement=$conn->prepare($sql);
+   $statement->bind_param("ss",$username,$password);
+   $statement->execute();
+   $result= $statement->get_result();
 
-   $_SESSION["username"]=$_POST["username"];
-   $_SESSION["password"]=$_POST["password"];
-   if(isset($_POST["username"]) && isset($_POST["password"]) )
+   if($result->num_rows == 1){
 
-      setcookie("usrname","password",time()+(86400*7),"/");
+   $_SESSION["username"]=$username;
 
-   }
-   if($_POST["usertype"] =="admin" ){
+
+      setcookie("username",$username,time()+(86400*7),"/");
+  
     header("Location:dashboard.php");
-   }
-   exit;
    
+   exit;
+   }
+   else{
+    $error="Invalid user password";
+   }
 }
 ?>
 
@@ -41,14 +46,14 @@ if(isset($_POST["submit"])){
 
 <body>
     
-  <form action="">
+  <form action="" method="POST">
     <h1>Login Page</h1>
     <p>Login with your details to continue </p>
 
    <label for="">Username:</label><br>
-   <input type="text" placeholder="UserName" ><br><br><br>
+   <input type="text" name="username" placeholder="UserName" ><br><br><br>
    <label for="">Password:</label><br>
-   <input type="text " placeholder="Password"><br><br>
+   <input type="text " name="password" placeholder="Password"><br><br>
    <input type="submit" name="submit" value="LogIn" style="background-color: #2b5ec5ff;
                                               color:white;
                                               width:55%;

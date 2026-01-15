@@ -2,7 +2,7 @@
     $host="localhost";
     $user="root";
     $pass="";
-    $dbname="hospital management system";
+    $dbname="hospital_management_system";
 
     $conn= new mysqli($host,$user,$pass,$dbname);
     if($conn->connect_error ){
