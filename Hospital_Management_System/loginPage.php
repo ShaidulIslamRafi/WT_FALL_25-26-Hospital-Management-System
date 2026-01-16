@@ -6,18 +6,19 @@ if(isset($_POST["submit"])){
   $username=$_POST["username"];
   $password=$_POST["password"];
   
-   $sql="SELECT * FROM admin WHERE `Username/Email`=?  AND `Password`=?" ;
+   $sql="SELECT username,password_hash,roles FROM admin WHERE username=?" ;
    $statement=$conn->prepare($sql);
-   $statement->bind_param("ss",$username,$password);
+   $statement->bind_param("s",$username);
    $statement->execute();
    $result= $statement->get_result();
 
    if($result->num_rows == 1){
+    $user = $result->fetch_assoc();
+    if(password_verify($password,$user["password_hash"])){
+   $_SESSION["username"]=$user["username"];
+   $_SESSION["roles"]=$user["roles"];
 
-   $_SESSION["username"]=$username;
-
-
-      setcookie("username",$username,time()+(86400*7),"/");
+      setcookie("username",$user["username"],time()+(86400*7),"/");
   
     header("Location:dashboard.php");
    
@@ -26,6 +27,8 @@ if(isset($_POST["submit"])){
    else{
     $error="Invalid user password";
    }
+   }
+   $statement->close();
 }
 ?>
 
@@ -48,12 +51,13 @@ if(isset($_POST["submit"])){
     
   <form action="" method="POST">
     <h1>Login Page</h1>
+    <?php  if($error!="") echo "<p style='color:red;font-weight:bold;'>$error</p>"; ?>
     <p>Login with your details to continue </p>
 
    <label for="">Username:</label><br>
    <input type="text" name="username" placeholder="UserName" ><br><br><br>
    <label for="">Password:</label><br>
-   <input type="text " name="password" placeholder="Password"><br><br>
+   <input type="password" name="password" placeholder="Password"><br><br>
    <input type="submit" name="submit" value="LogIn" style="background-color: #2b5ec5ff;color:white;width:55%;height:35px;position:absolute;left: 22%;top:60%;border-radius: 10px;" >
    <label for=""style="position:absolute;top:70%;">Don`t have an account</label>
   <a href="registrationPage.php">Sign up</a>

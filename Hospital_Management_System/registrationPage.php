@@ -1,3 +1,72 @@
+<?php
+include "database.php";
+$fname="";
+$lname="";
+$age="";
+$bgroup="";
+$username="";
+$password="";
+$cpassword="";
+$error="";
+
+function input_trim($data){
+   $data=trim($data);
+   return $data;
+
+}
+if($_SERVER["REQUEST_METHOD"]=="POST"){
+
+
+if(empty($_POST["fname"]) || empty($_POST["lname"]) || empty($_POST["dob"])|| empty($_POST["age"]) || empty($_POST["bgroup"]) || empty($_POST["username"]) || empty($_POST["password"]) || empty($_POST["cpassword"]) || empty($_POST["roles"])){
+
+
+$error="All field must be field";
+}
+else{
+$fname=input_trim($_POST["fname"]);
+$lname=input_trim($_POST["lname"]);
+$dob=input_trim($_POST["dob"]);
+$age=(int)input_trim($_POST["age"]);
+$bgroup=input_trim($_POST["bgroup"]);
+$username=input_trim($_POST["username"]);
+$password=input_trim($_POST["password"]);
+$cpassword=input_trim($_POST["cpassword"]);
+$roles=input_trim($_POST["roles"]);
+
+if(!filter_var($username,FILTER_VALIDATE_EMAIL) ){
+     $error="Invslid email formate";    
+}
+elseif($password!==$cpassword){
+     $error="Password not match.";
+}
+elseif($age<=0){
+   $error="Age must be valid";
+}
+else{
+   $hashpassword=password_hash($password,PASSWORD_DEFAULT);
+   $hashcpassword=password_hash($cpassword,PASSWORD_DEFAULT);
+   $sql="INSERT INTO admin (fname,lname,dob,age,bgroup,username,password_hash,cpassword_hash,roles)VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+   $statement=$conn->prepare($sql);
+   $statement->bind_param("sssisssss",$fname,$lname,$dob,$age,$bgroup,$username,$hashpassword,$hashcpassword,$roles);
+
+   if($statement->execute()){
+      header("Location: loginPage.php");
+      exit;
+   }
+   else{
+      $error="Registration failed " . $statement->error;
+   }
+   $statement->close();
+}
+
+}
+
+}
+
+?>
+
+
+
 
 
 <!DOCTYPE html>
@@ -18,6 +87,7 @@
 <body>
  <form method="post"  action="">
  <h1>Registration</h1>
+ <?php if($error!="") echo "<p style='color:red; font-weight:bold;'>$error</p>"; ?>
 <label for="">FirstName:</label> <br>
 <input type="text" name="fname"><br>
 <label for="">LastName:</label><br>
@@ -29,13 +99,7 @@
 
 
 <label for="">Blood Group</label> <br>
-<select name="blood" id="blood" style=" display:block;
-    margin-left:100px;
-    margin-bottom:0px;
-    padding:8px;
-    width:54%;
-    border:1px solid rgba(60, 60, 65, 1);
-    border-radius:10px">
+<select name="bgroup" style=" display:block;margin-left:100px;margin-bottom:0px;padding:8px;width:54%;border:1px solid rgba(60, 60, 65, 1);border-radius:10px">
    <option value="">Blood Group</option>
   <option value="A+">A+</option>
   <option value="A-">A-</option>
@@ -50,7 +114,7 @@
 
 
 <label for="">Username/Email:</label> <br>
-<input type="email" name="uname"><br>
+<input type="email" name="username"><br>
 <label for="">Password:</label> <br>
 <input type="text" name="password"><br>
 <label for="">Confirm Password:</label> <br>
@@ -58,13 +122,13 @@
 <label for="">Select User:</label> <br>
 
 <div class="radio_b"> 
-   <label class="radio_i"> <input type="radio" name="r_admin" value="admin">Admin  </label>
+   <label class="radio_i"> <input type="radio" name="roles" value="admin">Admin  </label>
 
-   <label class="radio_i"> <input type="radio" name="r_patient">Patient  </label>
+   <label class="radio_i"> <input type="radio" name="roles" value="patient">Patient  </label>
 
-  <label class="radio_i"> <input type="radio" name="r_doctor">Doctor  </label> 
+  <label class="radio_i"> <input type="radio" name="roles" value="doctor">Doctor  </label> 
 
-   <label class="radio_i"> <input type="radio" name="r_nurse">Nurse </label>
+   <label class="radio_i"> <input type="radio" name="roles" value="nurse">Nurse </label>
 
 </div>
 
@@ -76,57 +140,7 @@
 
 </form>
 
-<?php
-
-$fname="";
-$lname="";
-$age="";
-$bgroup="";
-$uname="";
-$password="";
-$cpassword="";
-$error="";
-
-function input_trim($data){
-   $data=trim($data);
-   return $data;
-
-}
-
-if(empty($_POST["fname"]) || empty($_POST["lname"]) || empty($_POST["age"]) || empty($_POST["bgroup"]) || empty($_POST["uname"]) || empty($_POST["password"]) || empty($_POST["cpassword"])){
-
-
-$error="All field must be field";
-}
-else{
-$fname=input_trim($_POST["fname"]);
-$lname=input_trim($_POST["lname"]);
-$age=input_trim($_POST["age"]);
-$bgroup=input_trim($_POST["bgroup"]);
-$uname=input_trim($_POST["uname"]);
-$password=input_trim($_POST["password"]);
-$cpassword=input_trim($_POST["cpassword"]);
-
-}
-
-
-
-?>
-
-
 
 </body>
 
 </html>
-
-<?php
-if ($_SERVER["REQUEST_METHOD"]=="POST" && empty($error)){
-
-    echo $fname; 
-    echo $lname;
-
-
-}
-
-
-?>
