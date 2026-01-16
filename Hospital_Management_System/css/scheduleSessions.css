@@ -1,0 +1,260 @@
+/* =========================
+   RESET & BASE
+========================= */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  background:#f3f4f6;
+  color:#111827;
+}
+
+.app{
+  display:flex;
+  min-height:100vh;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+.sidebar{
+  width:300px;
+  background:#4f46e5;
+  padding:28px 18px;
+}
+
+.logoTitle{
+  font-size:30px;
+  font-weight:900;
+  color:#fff;
+  margin:4px 8px 16px;
+}
+
+.profileBox{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  padding:0 8px 18px;
+  border-bottom:1px solid rgba(255,255,255,0.18);
+}
+
+.avatar{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:20px;
+}
+
+.profileText .name{
+  font-weight:900;
+  font-size:17px;
+  color:#fff;
+}
+.profileText .email{
+  font-size:13px;
+  color:rgba(255,255,255,0.8);
+}
+
+.logoutBtn{
+  display:block;
+  margin:16px 0 18px;
+  padding:11px;
+  background:rgba(255,255,255,0.18);
+  color:#fff;
+  text-align:center;
+  border-radius:12px;
+  font-weight:900;
+  text-decoration:none;
+}
+.logoutBtn:hover{
+  background:rgba(255,255,255,0.26);
+}
+
+.menu{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.menuItem{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px;
+  border-radius:14px;
+  color:rgba(255,255,255,0.9);
+  text-decoration:none;
+  transition:0.2s ease;
+}
+.menuItem i{
+  width:20px;
+  text-align:center;
+}
+.menuItem:hover{
+  background:rgba(255,255,255,0.14);
+}
+
+.menuItem.active{
+  background:rgba(255,255,255,0.18);
+  box-shadow: inset 4px 0 0 #ffffff;
+  font-weight:900;
+}
+
+/* =========================
+   MAIN AREA
+========================= */
+.main{
+  flex:1;
+  padding:26px 28px;
+  background:#ffffff;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+.topbar{
+  border-bottom:3px solid #4f46e5;
+  padding-bottom:14px;
+  margin-bottom:18px;
+}
+
+.pageTitle{
+  font-size:26px;
+  font-weight:950;
+}
+
+.subTitle{
+  margin-top:6px;
+  font-size:14px;
+  color:#6b7280;
+}
+
+/* =========================
+   TABLE CARD
+========================= */
+.tableCard{
+  background:#ffffff;
+  border:1px solid #e5e7eb;
+  border-radius:16px;
+  box-shadow:0 10px 25px rgba(17,24,39,0.06);
+  overflow-x:auto;
+}
+
+/* =========================
+   TABLE
+========================= */
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:800px;
+}
+
+thead th{
+  padding:14px;
+  text-align:left;
+  font-size:13px;
+  font-weight:900;
+  border-bottom:2px solid #4f46e5;
+  color:#111827;
+  white-space:nowrap;
+}
+
+tbody td{
+  padding:14px;
+  border-bottom:1px solid #eef2f7;
+  font-size:14px;
+  color:#374151;
+}
+
+tbody tr:hover td{
+  background:#f9fafb;
+}
+
+/* =========================
+   STATUS LABELS
+========================= */
+.status{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+}
+
+.statusGreen{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.statusAmber{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.statusRed{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.statusGray{
+  background:#f3f4f6;
+  color:#374151;
+}
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+.bookBtn{
+  border:none;
+  background:#4f46e5;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:12px;
+  font-weight:900;
+  cursor:pointer;
+  transition:0.2s ease;
+}
+.bookBtn:hover{
+  filter:brightness(0.95);
+  transform:translateY(-1px);
+}
+
+.muted{
+  color:#9ca3af;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 1000px){
+  .sidebar{
+    width:250px;
+  }
+}
+
+@media (max-width: 768px){
+  .app{
+    flex-direction:column;
+  }
+
+  .sidebar{
+    width:100%;
+  }
+
+  .main{
+    padding:18px;
+  }
+
+  table{
+    min-width:700px;
+  }
+}
