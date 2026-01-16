@@ -34,6 +34,7 @@ body{
 }
 .main .item{
     margin-top:40px;
+    position:relative;
 }
 .main .item li{
     list-style:none;
@@ -62,9 +63,29 @@ body{
     transition:0.3s ease;
 }
 
+.main .item ul li.logout {
+   
+    position:absolute;
+    bottom:20px;
+    top: 230%;
+    left:17%;
+    width:100%;
+    font-size: 20px;
+    
+   
+}
 
+.main .item ul li.logout a{
+      background:transparent;
+      display:flex;
+      align-items: center;
 
-
+     
+}
+.main .item ul li.logout i{
+      background-color:#b72d37;
+     
+}
 
  /*work on rightside uper*/
 
@@ -123,16 +144,6 @@ body{
 }
 .inteface .navigation .user_info i{
     font-size:22px;
-}
-input[name="logout"]{
-    background-color: #b72d37;
-    color:#ffffff;
-    padding:10px 20px;
-    border:none;
-    cursor:pointer;
-    position:absolute;
-    top:90%;
-    left:30%;
 }
 
           /*work on rightside middle*/

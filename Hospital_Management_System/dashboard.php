@@ -1,5 +1,8 @@
 <?php
    session_start();
+   if(!isset($_SESSION["username"])){
+    header("Location: loginPage.php");
+   }
 
 ?>
 <!DOCTYPE html>
@@ -28,7 +31,7 @@
             <li><a href="#"><i class="fas fa-clock"></i>Schedule</a></li>
             <li><a href="#"><i class="fas fa-calendar-check"></i>Appointment</a></li>
             <li><a href="#"><i class="fas fa-procedures"></i>Patients</a></li>
-            <input type="submit" value="Log out" name="logout">
+            <li class="logout"><a href="logout.php"><i class="fas fa-sign-out-alt"></i>LogOut</a></li>
         </ul>
     </div>
 </section>
