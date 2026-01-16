@@ -20,7 +20,7 @@ if(isset($_POST["submit"])){
 
       setcookie("username",$user["username"],time()+(86400*7),"/");
   
-    header("Location:dashboard.php");
+    header("Location:dashboardPage.php");
    
    exit;
    }

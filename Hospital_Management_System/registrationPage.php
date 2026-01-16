@@ -52,6 +52,7 @@ else{
    if($statement->execute()){
       header("Location: loginPage.php");
       exit;
+
    }
    else{
       $error="Registration failed " . $statement->error;

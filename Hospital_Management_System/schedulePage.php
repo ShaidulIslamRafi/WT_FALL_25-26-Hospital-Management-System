@@ -26,13 +26,12 @@
     </div>
     <div  class="item">
         <ul> 
-            <li><a href="#"><i class="fas fa-tachometer-alt"></i>Dashboard</a></li>
-            <li><a href="#"><i class="fas fa-user-md"></i>Doctors</a></li>
-            <li><a href="#"><i class="fas fa-clock"></i>Schedule</a></li>
-            <li><a href="#"><i class="fas fa-calendar-check"></i>Appointment</a></li>
-            <li><a href="#"><i class="fas fa-procedures"></i>Patients</a></li>
+             <li><a href="dashboardPage.php"><i class="fas fa-tachometer-alt"></i>Dashboard</a></li>
+            <li><a href="doctorPage.php"><i class="fas fa-user-md"></i>Doctors</a></li>
+            <li><a href="schedulePage.php"><i class="fas fa-clock"></i>Schedule</a></li>
+            <li><a href="appointmentPage.php"><i class="fas fa-calendar-check"></i>Appointment</a></li>
+            <li><a href="patientPage.php"><i class="fas fa-procedures"></i>Patients</a></li>
             <li class="logout"><a href="logout.php"><i class="fas fa-sign-out-alt"></i>LogOut</a></li>
-        </ul>
     </div>
 </section>
 </div>
