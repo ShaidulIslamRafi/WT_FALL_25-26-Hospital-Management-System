@@ -4,6 +4,10 @@
     header("Location: loginPage.php");
    }
 
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -69,14 +73,14 @@
         <div class="box">
             <i class="fas fa-users"></i>
             <div>
-                <h3>22</h3>
+                <h3 id="doctorCount">0</h3>
                 <span>Doctors</span>
             </div>
         </div>
          <div class="box">
             <i class="fas fa-users"></i>
             <div>
-                <h3>22</h3>
+                <h3 id="patientCount">0</h3>
                 <span>Patients</span>
             </div>
         </div>
@@ -123,4 +127,42 @@
 
 
 </body>
+
+<script>
+    function loadDoctor(){
+        var xhttp= new XMLHttpRequest();
+        xhttp.onreadystatechange= function (){
+            if (this.readyState === 4 && this.status === 200){
+                document.getElementById("doctorCount").innerHTML=this.responseText;
+            }
+        };
+        xhttp.open("GET","doctor_count.php",true);
+        xhttp.send();
+    }
+    function loadPatient(){
+        var xhttp= new XMLHttpRequest();
+        xhttp.onreadystatechange= function (){
+            if (this.readyState === 4 && this.status === 200){
+                document.getElementById("patientCount").innerHTML=this.responseText;
+            }
+        };
+        xhttp.open("GET","patient_count.php",true);
+        xhttp.send();
+    }
+    
+    loadDoctor();
+    loadPatient();
+
+
+    setInterval(function(){
+        loadDoctor();
+        loadPatient();
+},5000);
+    
+
+
+</script>
+
+
+
 </html>
