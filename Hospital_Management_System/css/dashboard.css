@@ -111,24 +111,30 @@ body{
 }
 .inteface .navigation .profile{
      display:flex;
-     justify-content:flex-start;
      align-items:center;
+     gap:15px;
 
 }
-.inteface .navigation .profile i{
-      margin-right:20px;
-      font-size:19px;
-      font-weight:400;
-
+.inteface .navigation .user_info{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-weight:500;
 }
-.inteface .navigation .profile img{
-     width:30px;
-     height:30px;
-     object-fit:cover;
-     border-radius:50%;
-
-
+.inteface .navigation .user_info i{
+    font-size:22px;
 }
+input[name="logout"]{
+    background-color: #b72d37;
+    color:#ffffff;
+    padding:10px 20px;
+    border:none;
+    cursor:pointer;
+    position:absolute;
+    top:90%;
+    left:30%;
+}
+
           /*work on rightside middle*/
 
 

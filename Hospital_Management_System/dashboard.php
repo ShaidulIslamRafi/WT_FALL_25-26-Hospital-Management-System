@@ -23,11 +23,12 @@
     </div>
     <div  class="item">
         <ul> 
-            <li><a href=""><i class="fas fa-tv"></i>Dashboard</a></li>
-            <li><a href=""><i class="fas fa-user-doctor"></i>Doctors</a></li>
-            <li><a href=""><i class="fas fa-clock"></i>Schedule</a></li>
-            <li><a href=""><i class="fas fa-tv"></i>Appointment</a></li>
-            <li><a href=""><i class="fas fa-tv"></i>Patients</a></li>
+            <li><a href="#"><i class="fas fa-tachometer-alt"></i>Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-user-md"></i>Doctors</a></li>
+            <li><a href="#"><i class="fas fa-clock"></i>Schedule</a></li>
+            <li><a href="#"><i class="fas fa-calendar-check"></i>Appointment</a></li>
+            <li><a href="#"><i class="fas fa-procedures"></i>Patients</a></li>
+            <input type="submit" value="Log out" name="logout">
         </ul>
     </div>
 </section>
@@ -48,7 +49,14 @@
         </div>
             <div class="profile">
                 <i class="far fa-bell"></i>
-                <img src="image/dashboard.jpg" alt=""> 
+                
+                <div class="user_info">
+                    
+                    <span>
+                        <?php echo $_SESSION["username"]; ?>
+                    </span>
+                    <i class="fas fa-user-circle"></i>
+                </div>
                 
             </div>
     </div>
