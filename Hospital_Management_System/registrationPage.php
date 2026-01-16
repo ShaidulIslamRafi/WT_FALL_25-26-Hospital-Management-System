@@ -68,22 +68,9 @@
 
 </div>
 
-<input type="submit" name="submit" value="Submit" style="background-color: #2b5ec5ff;
-                                              color:white;
-                                              width:54%;
-                                              height:35px;
-                                              position:absolute;
-                                              left:0%;
-                                              top:86%;
-                                              border-radius: 10px;"><br>
-<input type="submit" name="back" value="Back" style="background-color: rgb(77, 96, 133);
-                                              color:white;
-                                              width:54%;
-                                              height:35px;
-                                              position:absolute;
-                                              left:0%;
-                                              top:92%;
-                                              border-radius: 10px;"><br>
+<input type="submit" name="submit" value="Submit" style="background-color: #2b5ec5ff;color:white;width:54%;height:35px;position:absolute;left:0%;top:86%;border-radius: 10px;"><br>
+<label for=""style="position:absolute;top:93%;">I have an account</label>
+  <a href="loginPage.php">Login</a>
 
 
 

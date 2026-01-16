@@ -54,14 +54,7 @@ if(isset($_POST["submit"])){
    <input type="text" name="username" placeholder="UserName" ><br><br><br>
    <label for="">Password:</label><br>
    <input type="text " name="password" placeholder="Password"><br><br>
-   <input type="submit" name="submit" value="LogIn" style="background-color: #2b5ec5ff;
-                                              color:white;
-                                              width:55%;
-                                              height:35px;
-                                              position:absolute;
-                                              left: 22%;
-                                              top:60%;
-                                              border-radius: 10px;" >
+   <input type="submit" name="submit" value="LogIn" style="background-color: #2b5ec5ff;color:white;width:55%;height:35px;position:absolute;left: 22%;top:60%;border-radius: 10px;" >
    <label for=""style="position:absolute;top:70%;">Don`t have an account</label>
   <a href="registrationPage.php">Sign up</a>
   </form>  
