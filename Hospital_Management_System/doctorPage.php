@@ -71,9 +71,7 @@
             </div>
     </div>
 
-</section>
 
-</div>
 
 <div class="topbar">
     <h2>Add new doctor </h2>
@@ -122,7 +120,9 @@
 
 
 
+</section>
 
+</div>
 
 </body>
 </html>

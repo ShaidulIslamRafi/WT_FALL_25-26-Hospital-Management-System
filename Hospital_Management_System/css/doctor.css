@@ -209,3 +209,69 @@ body{
 
              /*work on rightside lower*/
 
+.toper{
+    padding: 30px 30px 0 30px;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.add_btn{
+  background:#594ef7;
+  color:#fff;
+  padding:10px 16px;
+  border-radius:6px;
+  text-decoration:none;
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+}
+
+.sub{
+  padding: 10px 30px 0 30px;
+  color:#444a53;
+  font-weight:600;
+}
+
+.table{
+  margin: 15px 30px 30px 30px;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:8px;
+  overflow:hidden;
+}
+
+.table table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.table th,
+.table td{
+  padding:14px;
+  border-bottom:1px solid #eee;
+  text-align:left;
+}
+
+.table th{
+  background:#fafafa;
+  font-weight:600;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.edit_btn,
+.view_btn,
+.remove_btn{
+  padding:8px 12px;
+  border-radius:6px;
+  text-decoration:none;
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  background:#e3f2fd;
+  color:#1565c0;
+}
