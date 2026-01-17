@@ -45,7 +45,7 @@ elseif($age<=0){
 else{
    $hashpassword=password_hash($password,PASSWORD_DEFAULT);
    $hashcpassword=password_hash($cpassword,PASSWORD_DEFAULT);
-   $sql="INSERT INTO admin (fname,lname,dob,age,bgroup,username,password_hash,cpassword_hash,roles)VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+   $sql="INSERT INTO user (fname,lname,dob,age,bgroup,username,password_hash,cpassword_hash,roles)VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
    $statement=$conn->prepare($sql);
    $statement->bind_param("sssisssss",$fname,$lname,$dob,$age,$bgroup,$username,$hashpassword,$hashcpassword,$roles);
 

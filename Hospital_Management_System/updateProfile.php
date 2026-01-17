@@ -9,47 +9,60 @@ $username=$_SESSION["username"];
 $success="";
 $error="";
 
-if(isset($_POST["update"])){
+      $statement=$conn->prepare("SELECT fname,lname,dob,age,password_hash FROM user WHERE username=?");
+      $statement->bind_param("s",$username);
+      $statement->execute();
+      $user=$statement->get_result()->fetch_assoc();
+      $statement->close();
+
+if(isset($_POST["submit"])){
 
 $fname=trim($_POST["fname"]);
 $lname=trim($_POST["lname"]);
 $dob=trim($_POST["dob"]);
 $age=(int)trim($_POST["age"]);
-$bgroup=trim($_POST["bgroup"]);
 
-$statement=&conn->prepare("UPDATE admin SET fname=?, lname=?,dob=?, age=?, bgroup=? WHERE username=?");
-$statement->bind_param("sssiss",$fname,$lname,$dob,$age,$bgroup,$username);
+if(!empty($_POST["current_password"])){
+    $current_password = $_POST["current_password"];
+    $new_password = $_POST["new_password"];
+    $confirm_password = $_POST["confirm_password"];
 
-if($statement->execute()){
-    $success="Profile update successfully!";
+   if($new_password !== $confirm_password){
+      $error="New Password and confirm password do not match!";
+   }
+   else if(!password_verify($current_password,$user["password_hash"])){
+       $error="Current Password is incorrect!";
+   }
+    else{
+      $new_hash=password_hash($new_password,PASSWORD_DEFAULT);
+      $statement=$conn->prepare("UPDATE user SET password_hash=? WHERE username=?");
+      $statement->bind_param("ss",$new_hash,$username);
+      $statement->execute();
+      $statement->close();
+
+      $success="password change successfully!";
+
+    }
+}
+
+
+
+if($error ==""){
+   $statement=$conn->prepare("UPDATE user SET fname=?, lname=?,dob=?, age=? WHERE username=?");
+   $statement->bind_param("sssis",$fname,$lname,$dob,$age,$username);
+
+
+  if($statement->execute()){
+     if($success =="" )
+      $success="Profile update successfully!";
 }
 else{
     $error="Update failed!";
+  }
+  
+   $statement->close();
 }
-$statement->close();
-
-}
-$statement=$conn->prepare("SELECT fname,lname,dob,age,bgroup,username,roles FROM admin WHERE username=?");
-$statement->bind_pram("s",$username);
-$statement->execute();
-$user=$statement->get_result()->fetch_assoc();
-$statement->close();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ }
 
 
 ?>
@@ -74,60 +87,37 @@ $statement->close();
 </head>
 
 <body>
+
  <form method="post"  action="">
  <h1>Update Profile</h1>
+ <div class="message">
+<?php if($success!="") echo "<p style='color:green; font-weight:bold;'>$success</p>"; ?>
  <?php if($error!="") echo "<p style='color:red; font-weight:bold;'>$error</p>"; ?>
+ </div>
+ 
 <label for="">FirstName:</label> <br>
-<input type="text" name="fname"><br>
+<input type="text" name="fname" value="<?php echo htmlspecialchars($user['fname']);?>"required><br><br>
 <label for="">LastName:</label><br>
-<input type="text" name="lname"><br>
+<input type="text" name="lname" value="<?php echo htmlspecialchars($user['lname']);?>"required><br><br>
  <label for="">Date Of Birth</label><br>
- <input type="date" name="dob"><br>
+ <input type="date" name="dob" value="<?php echo htmlspecialchars($user['dob']);?>"required><br><br>
 <label for="">Age:</label><br>
-<input type="text" name="age"><br>
+<input type="text" name="age" value="<?php echo (int) $user['age'];?>"required><br><br>
 
-
-<label for="">Blood Group</label> <br>
-<select name="bgroup" style=" display:block;margin-left:100px;margin-bottom:0px;padding:8px;width:54%;border:1px solid rgba(60, 60, 65, 1);border-radius:10px">
-   <option value="">Blood Group</option>
-  <option value="A+">A+</option>
-  <option value="A-">A-</option>
-  <option value="B+">B+</option>
-  <option value="B-">B-</option>
-  <option value="AB+">AB+</option>
-  <option value="AB-">AB-</option>
-  <option value="O+">O+</option>
-  <option value="O-">O-</option>
-</select><br>
+<label>Current Password:</label><br>
+<input type="password" name="current_password"><br><br>
+<label>New Password:</label><br>
+<input type="password" name="new_password"><br><br>
+<label>Confirm New Password:</label><br>
+<input type="password" name="confirm_password"><br><br>
 
 
 
-<label for="">Username/Email:</label> <br>
-<input type="email" name="username"><br>
-<label for="">Password:</label> <br>
-<input type="text" name="password"><br>
-<label for="">Confirm Password:</label> <br>
-<input type="text" name="cpassword"><br>
-<label for="">Select User:</label> <br>
 
-<div class="radio_b"> 
-   <label class="radio_i"> <input type="radio" name="roles" value="admin">Admin  </label>
-
-   <label class="radio_i"> <input type="radio" name="roles" value="patient">Patient  </label>
-
-  <label class="radio_i"> <input type="radio" name="roles" value="doctor">Doctor  </label> 
-
-   <label class="radio_i"> <input type="radio" name="roles" value="nurse">Nurse </label>
-
-</div>
-
-<input type="submit" name="submit" value="Submit" style="background-color: #2b5ec5ff;color:white;width:54%;height:35px;position:absolute;left:0%;top:86%;border-radius: 10px;"><br>
-<label for=""style="position:absolute;top:93%;">I have an account</label>
-  <a href="loginPage.php">Login</a>
-
-
-
+<input type="submit" name="submit" value="Update" ><br>
 </form>
+<br>
+<a href="dashboardPage.php">Back To DashBoard</a>
 
 
 </body>

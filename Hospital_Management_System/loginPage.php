@@ -6,7 +6,7 @@ if(isset($_POST["submit"])){
   $username=$_POST["username"];
   $password=$_POST["password"];
   
-   $sql="SELECT username,password_hash,roles FROM admin WHERE username=?" ;
+   $sql="SELECT username,password_hash,roles FROM user WHERE username=?" ;
    $statement=$conn->prepare($sql);
    $statement->bind_param("s",$username);
    $statement->execute();

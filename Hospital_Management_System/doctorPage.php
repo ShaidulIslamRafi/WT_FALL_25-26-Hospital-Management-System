@@ -2,7 +2,14 @@
    session_start();
    if(!isset($_SESSION["username"])){
     header("Location: loginPage.php");
+    exit;
    }
+   include "database.php";
+    $result= $conn->query("SELECT username,dname,phone,specialist FROM doctor ORDER BY created_at DESC");
+    $total=$result->num_rows;
+
+
+
 
 ?>
 <!DOCTYPE html>
@@ -63,63 +70,58 @@
                 
             </div>
     </div>
-    <h3 class="dashname"> Dashboard </h3>
-               <!-- work on rightside middle-->
-    <div class="value">
-        <div class="box">
-            <i class="fas fa-users"></i>
-            <div>
-                <h3>22</h3>
-                <span>Doctors</span>
-            </div>
-        </div>
-         <div class="box">
-            <i class="fas fa-users"></i>
-            <div>
-                <h3>22</h3>
-                <span>Patients</span>
-            </div>
-        </div>
-         <div class="box">
-            <i class="fas fa-users"></i>
-            <div>
-                <h3>22</h3>
-                <span>NewBooking</span>
-            </div>
-        </div>
-         <div class="box">
-            <i class="fas fa-users"></i>
-            <div>
-                <h3>22</h3>
-                <span>Today</span>
-            </div>
-        </div>
-    </div>
-
-                       <!-- work on rightside lower-->
-       <div class="board">
-        <table width="100%">
-            <thead>
-                <tr>
-                    <td>Name</td>
-                    <td>Title</td>
-                    <td>Status</td>
-                    <td>Role</td>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td> </td>
-                </tr>
-            </tbody>
-        </table>
-       </div>
-
 
 </section>
 
 </div>
+
+<div class="topbar">
+    <h2>Add new doctor </h2>
+    <a class="add_btn"href="doctor/doctor_add.php"> <i class="fas fa-plus"> </i>Add new</a>
+</div>
+  <h3 class="sub">All doctors(<?php echo $total;?>) </h3>
+  <div class="table">
+    <table>
+        <thead>
+            <tr>
+                <th>Doctor Name</th>
+                <th>Username</th>
+                <th>Phone</th>
+                <th>Specialist</th>
+                <th>Events</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <?php while($row= $result->fetch_assoc()):?>
+            <tr>
+                <td><?php echo htmlspecialchars($row["dname"]);?> </td>
+                <td><?php echo htmlspecialchars($row["username"]);?>  </td>
+                 <td><?php echo htmlspecialchars($row["phone"]);?> </td>
+                <td><?php echo htmlspecialchars($row["specialist"]);?> </td>
+                <td class="actions">
+                 <a class="edit_btn"href="doctor/doctor_edit.php?username=<?php echo urlencode($row["username"]);?>">
+                    <i class="fas fa-pen"></i>Edit
+                 </a>    
+                  <a class="view_btn"href="doctor/doctor_view.php?username=<?php echo urlencode($row["username"]);?>">
+                    <i class="fas fa-eye"></i>View
+                 </a>  
+                  <a class="remove_btn"href="doctor/doctor_delete.php?username=<?php echo urlencode($row["username"]);?>"
+                    onclick="return confirm('Remove this doctor?');">
+                    <i class="fas fa-trash"></i>Remove
+                 </a>  
+
+                </td>
+            
+            </tr>
+            <?php endwhile;?>
+        </tbody>
+    </table>
+
+  </div>
+
+
+
 
 
 </body>
