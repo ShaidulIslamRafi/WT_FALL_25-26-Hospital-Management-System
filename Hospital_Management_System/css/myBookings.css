@@ -1,0 +1,112 @@
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:system-ui,Segoe UI,Roboto,Arial;
+  background:#f3f4f6;
+  color:#111827;
+}
+
+.app{display:flex;min-height:100vh}
+
+.sidebar{
+  width:300px;
+  background:#4f46e5;
+  padding:28px 18px;
+}
+.logoTitle{
+  font-size:30px;
+  font-weight:900;
+  color:#fff;
+  margin:4px 8px 16px;
+}
+.profileBox{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  padding:0 8px 18px;
+  border-bottom:1px solid rgba(255,255,255,.2);
+}
+.avatar{
+  width:52px;height:52px;
+  border-radius:50%;
+  background:rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;
+}
+.profileText .name{color:#fff;font-weight:900}
+.profileText .email{color:#ddd;font-size:13px}
+
+.logoutBtn{
+  display:block;
+  margin:16px 0;
+  padding:11px;
+  background:rgba(255,255,255,.2);
+  color:#fff;
+  text-align:center;
+  border-radius:12px;
+  font-weight:900;
+  text-decoration:none;
+}
+
+.menu{display:flex;flex-direction:column;gap:6px}
+.menuItem{
+  padding:12px;
+  border-radius:14px;
+  color:#fff;
+  text-decoration:none;
+}
+.menuItem.active{
+  background:rgba(255,255,255,.2);
+  box-shadow: inset 4px 0 #fff;
+}
+.main{
+  flex:1;
+  background:#fff;
+  padding:26px 28px;
+}
+
+.topbar{
+  border-bottom:3px solid #4f46e5;
+  padding-bottom:14px;
+  margin-bottom:18px;
+}
+
+.pageTitle{font-size:26px;font-weight:900}
+.subTitle{font-size:14px;color:#6b7280}
+
+.tableCard{
+  border:1px solid #e5e7eb;
+  border-radius:16px;
+  overflow-x:auto;
+}
+table{width:100%;border-collapse:collapse}
+thead th{
+  padding:14px;
+  font-size:13px;
+  border-bottom:2px solid #4f46e5;
+}
+tbody td{
+  padding:14px;
+  border-bottom:1px solid #eee;
+}
+
+.status{
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+}
+.statusGreen{background:#dcfce7;color:#166534}
+.statusAmber{background:#fef3c7;color:#92400e}
+.statusRed{background:#fee2e2;color:#991b1b}
+.statusGray{background:#eee}
+
+.dangerBtn{
+  background:#ef4444;
+  color:#fff;
+  border:none;
+  padding:7px 12px;
+  border-radius:10px;
+  font-weight:900;
+  cursor:pointer;
+}
+.muted{color:#9ca3af}
