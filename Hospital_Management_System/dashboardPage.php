@@ -102,25 +102,7 @@
         </div>
     </div>
 
-                       <!-- work on rightside lower-->
-       <div class="board">
-        <table width="100%">
-            <thead>
-                <tr>
-                    <td>Name</td>
-                    <td>Title</td>
-                    <td>Status</td>
-                    <td>Role</td>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td> </td>
-                </tr>
-            </tbody>
-        </table>
-       </div>
+                    
 
 
 </section>

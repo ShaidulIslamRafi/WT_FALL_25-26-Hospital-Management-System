@@ -63,57 +63,11 @@
             </div>
     </div>
     <h3 class="dashname"> Dashboard </h3>
-               <!-- work on rightside middle-->
-    <div class="value">
-        <div class="box">
-            <i class="fas fa-users"></i>
-            <div>
-                <h3>22</h3>
-                <span>Doctors</span>
-            </div>
-        </div>
-         <div class="box">
-            <i class="fas fa-users"></i>
-            <div>
-                <h3>22</h3>
-                <span>Patients</span>
-            </div>
-        </div>
-         <div class="box">
-            <i class="fas fa-users"></i>
-            <div>
-                <h3>22</h3>
-                <span>NewBooking</span>
-            </div>
-        </div>
-         <div class="box">
-            <i class="fas fa-users"></i>
-            <div>
-                <h3>22</h3>
-                <span>Today</span>
-            </div>
-        </div>
+               
     </div>
 
-                       <!-- work on rightside lower-->
-       <div class="board">
-        <table width="100%">
-            <thead>
-                <tr>
-                    <td>Name</td>
-                    <td>Title</td>
-                    <td>Status</td>
-                    <td>Role</td>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td> </td>
-                </tr>
-            </tbody>
-        </table>
-       </div>
+                   
+     
 
 
 </section>

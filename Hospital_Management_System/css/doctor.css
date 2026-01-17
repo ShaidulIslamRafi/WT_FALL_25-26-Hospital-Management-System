@@ -145,6 +145,12 @@ body{
 .inteface .navigation .user_info i{
     font-size:22px;
 }
+.add_btn{
+    position: absolute;
+    left:90%;
+}
+
+
 
           /*work on rightside middle*/
 
@@ -245,8 +251,7 @@ body{
   border-collapse:collapse;
 }
 
-.table th,
-.table td{
+.table th,.table td{
   padding:14px;
   border-bottom:1px solid #eee;
   text-align:left;
@@ -263,9 +268,7 @@ body{
   flex-wrap:wrap;
 }
 
-.edit_btn,
-.view_btn,
-.remove_btn{
+.edit_btn, .view_btn, .remove_btn{
   padding:8px 12px;
   border-radius:6px;
   text-decoration:none;
