@@ -21,7 +21,6 @@ $sesRes = $conn->query($sesSql);
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> </title>
 <link  rel="stylesheet" href="css/dashboard.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
@@ -213,14 +212,40 @@ $sesRes = $conn->query($sesSql);
         xhttp.open("GET","patient_count.php",true);
         xhttp.send();
     }
+    function loadBooking(){
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function(){
+    if(this.readyState === 4 && this.status === 200){
+      document.getElementById("bookingCount").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET","booking_count.php",true);
+  xhttp.send();
+}
+
+function loadTodayBooking(){
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function(){
+    if(this.readyState === 4 && this.status === 200){
+      document.getElementById("todayBookingCount").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET","today_booking_count.php",true);
+  xhttp.send();
+}
+
     
     loadDoctor();
     loadPatient();
+    loadBooking();
+    loadTodayBooking();
 
 
     setInterval(function(){
         loadDoctor();
         loadPatient();
+        loadBooking();
+        loadTodayBooking();
 },5000);
     
 

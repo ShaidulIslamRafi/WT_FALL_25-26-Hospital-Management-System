@@ -22,6 +22,18 @@ if(isset($_POST["submit"])){
    if($result->num_rows == 1){
     $user = $result->fetch_assoc();
     if(password_verify($password,$user["password_hash"])){
+      if($user["roles"] !== "admin" ){
+        $error="Access denied! Admin only!";
+      }
+      else{
+
+      
+
+
+
+
+
+
    $_SESSION["username"]=$user["username"];
    $_SESSION["roles"]=$user["roles"];
 
@@ -31,6 +43,7 @@ if(isset($_POST["submit"])){
    
    exit;
    }
+    }
    else{
     $error="Invalid user password";
    }

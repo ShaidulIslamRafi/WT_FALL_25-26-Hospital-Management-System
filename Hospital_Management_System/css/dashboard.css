@@ -165,7 +165,7 @@ body{
 }
 .value .box{
     background:hsl(0, 3%, 94%);
-    width:235px;
+    width:250px;
     padding:16px 20px;
     border-radius:5px;
     display:flex;
@@ -175,7 +175,7 @@ body{
 }
 .value .box i{
     font-size:25px;
-    width:60px;
+    width:70px;
     height:60px;
     line-height:60px;
     border-radius: 50%;
