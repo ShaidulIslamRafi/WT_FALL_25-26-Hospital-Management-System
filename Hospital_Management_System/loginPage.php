@@ -3,11 +3,18 @@
     include "database.php";
   $error="";
 if(isset($_POST["submit"])){
-  $username=$_POST["username"];
+  $username=trim($_POST["username"]);
   $password=$_POST["password"];
+
+  if($username=="" || $password==""){
+    $error="Username and Password are required!";
+  }else{  
   
    $sql="SELECT username,password_hash,roles FROM user WHERE username=?" ;
    $statement=$conn->prepare($sql);
+   if(!$statement){
+    $error="Database error " . $conn->error;
+   }else{
    $statement->bind_param("s",$username);
    $statement->execute();
    $result= $statement->get_result();
@@ -27,8 +34,12 @@ if(isset($_POST["submit"])){
    else{
     $error="Invalid user password";
    }
+   }else{
+    $error="User Not found";
    }
    $statement->close();
+   }
+}
 }
 ?>
 
@@ -37,10 +48,7 @@ if(isset($_POST["submit"])){
 
 <head>
   <meta charset="UTF-8">
-  <meta name="description" content="Hospital management">
-  <meta name="author" content="Rafi">
-  <meta name="keyword" content="Hospital,manangement">
-  <meta name="viewpoint" content ="width=device-width,initial-scal=1.0">
+  <meta name="viewport" content ="width=device-width,initial-scale=1.0">
 
  <title>Log In</title>
 <link rel="stylesheet" href="css/login.css">

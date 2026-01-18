@@ -209,3 +209,47 @@ body{
 
              /*work on rightside lower*/
 
+
+.dash-panels{
+  margin-left: 310px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+}
+
+/* panel box */
+.dash-panels .panel{
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 15px;
+}
+
+/* title */
+.dash-panels .panel h2{
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* table */
+.dash-panels table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* table cells */
+.dash-panels th,
+.dash-panels td{
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  text-align: left;
+}
+
+/* table header */
+.dash-panels th{
+  background: #f2f2f2;
+  font-weight: bold;
+}
+
