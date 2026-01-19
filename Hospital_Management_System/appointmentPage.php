@@ -3,7 +3,18 @@
    session_start();
    if(!isset($_SESSION["username"])){
     header("Location: loginPage.php");
+    exit;
    }
+
+include "database.php";
+
+$sql = "SELECT appointmentnumber, username, pname, dname, session FROM appointment ORDER BY appointmentnumber DESC";
+$result = $conn->query($sql);
+$total = $result ? $result->num_rows : 0;
+
+
+
+
 
 ?>
 <!DOCTYPE html>
@@ -12,7 +23,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title> </title>
-<link  rel="stylesheet" href="css/dashboard.css">
+<link  rel="stylesheet" href="css/doctor.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
@@ -65,58 +76,64 @@
                 
             </div>
     </div>
-    <h3 class="dashname"> Dashboard </h3>
-               <!-- work on rightside middle-->
-    <div class="value">
-        <div class="box">
-            <i class="fas fa-users"></i>
-            <div>
-                <h3>22</h3>
-                <span>Doctors</span>
-            </div>
-        </div>
-         <div class="box">
-            <i class="fas fa-users"></i>
-            <div>
-                <h3>22</h3>
-                <span>Patients</span>
-            </div>
-        </div>
-         <div class="box">
-            <i class="fas fa-users"></i>
-            <div>
-                <h3>22</h3>
-                <span>NewBooking</span>
-            </div>
-        </div>
-         <div class="box">
-            <i class="fas fa-users"></i>
-            <div>
-                <h3>22</h3>
-                <span>Today</span>
-            </div>
-        </div>
+                       <!-- work on rightside lower-->
+     <div class="topbar">
+      <h2>Appointment Manager</h2>
+      <a class="add_btn" href="appointment/appointment_add.php">
+        <i class="fas fa-plus"></i> Add New
+      </a>
     </div>
 
-                       <!-- work on rightside lower-->
-       <div class="board">
-        <table width="100%">
-            <thead>
-                <tr>
-                    <td>Name</td>
-                    <td>Title</td>
-                    <td>Status</td>
-                    <td>Role</td>
+    <h3 class="sub">All Appointments(<?php echo $total; ?>)</h3>
 
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td> </td>
-                </tr>
-            </tbody>
-        </table>
-       </div>
+    <div class="table">
+      <table>
+        <thead>
+          <tr>
+            <th>Appointment No</th>
+            <th>Username</th>
+            <th>Patient Name</th>
+            <th>Doctor Name</th>
+            <th>Session Time</th>
+            <th>Events</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        <?php if($result && $result->num_rows > 0){ ?>
+          <?php while($row = $result->fetch_assoc()){ ?>
+            <tr>
+              <td><?php echo htmlspecialchars($row["appointmentnumber"]); ?></td>
+              <td><?php echo htmlspecialchars($row["username"]); ?></td>
+              <td><?php echo htmlspecialchars($row["pname"]); ?></td>
+              <td><?php echo htmlspecialchars($row["dname"]); ?></td>
+              <td><?php echo htmlspecialchars($row["session"]); ?></td>
+
+              <td class="actions">
+                <a class="view_btn"
+                   href="appointment/appointment_view.php?id=<?php echo urlencode($row["appointmentnumber"]); ?>">
+                  <i class="fas fa-eye"></i> View
+                </a>
+
+                <a class="remove_btn"
+                   href="appointment/appointment_delete.php?id=<?php echo urlencode($row["appointmentnumber"]); ?>"
+                   onclick="return confirm('Delete this appointment?');">
+                  <i class="fas fa-trash"></i> Remove</a>
+              </td>
+            </tr>
+          <?php
+          } ?>
+        <?php } 
+        else { 
+            ?>
+          <tr>
+            <td colspan="6" style="text-align:center;">No appointments found</td>
+          </tr>
+        <?php } ?>
+        </tbody>
+      </table>
+    </div>   
+
 
 
 </section>
