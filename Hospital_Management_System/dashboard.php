@@ -152,7 +152,7 @@ mysqli_stmt_close($stmt2);
         <div class="welcome">Welcome!</div>
         <div class="heroName"><?php echo htmlspecialchars($fullName); ?>.</div>
         <p class="heroDesc">View today’s sessions and your upcoming bookings.</p>
-        <div class="heroSearchTitle">Quick Search (UI only)</div>
+        <div class="heroSearchTitle">Quick Search</div>
         <div class="searchRow">
           <div class="searchInput">
             <i class="fa-solid fa-magnifying-glass"></i>
