@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-
+      <div class="doctor"> 
     <div class="topbar">
           <h2>Add New Doctor</h2>
           <a class="back_btn"href="../doctorPage.php">Back</a>
@@ -53,19 +53,19 @@
 
    <form method="post" class="form">
 
-     <label >Username</label>
-     <input type="text" name="username" required >
+     <label >Username</label><br>
+     <input type="text" name="username" required ><br>
 
-      <label >Doctor Name</label>
-     <input type="text" name="dname" required >
+      <label >Doctor Name</label><br>
+     <input type="text" name="dname" required ><br>
      
-     <label >Phone</label>
-     <input type="text" name="phone" required >
+     <label >Phone</label><br>
+     <input type="text" name="phone" required ><br>
 
-     <label >Specialist</label>
-     <input type="text" name="specialist" required >
+     <label >Specialist</label><br>
+     <input type="text" name="specialist" required ><br>
 
-     <button type="submit" name="save" class="add_btn">Save</button>
+     <button type="submit" name="save" class="btn">Save</button><br>
 
 
 
@@ -73,7 +73,7 @@
 
 
    </form>
-
+ </div>
 
 </body>
 </html>

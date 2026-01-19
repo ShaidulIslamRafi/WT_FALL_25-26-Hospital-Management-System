@@ -278,3 +278,32 @@ body{
   background:#e3f2fd;
   color:#1565c0;
 }
+.doctor{
+    max-width: 400px;
+    margin: 60px auto;
+    background-color: #ddd;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgb(0,0,0,0.1);
+    
+
+}
+.doctor_add label{
+  margin-top: 12px;
+  font-weight: 600;
+}
+.doctor_add input{
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.btn{
+  margin-top: 20px;
+  padding: 12px;
+  background: #2b7cff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

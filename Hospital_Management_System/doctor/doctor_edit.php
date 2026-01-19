@@ -65,6 +65,7 @@ session_start();
 </head>
 
 <body>
+    <div class="doctor"> 
   
  <div class="topbar">
     <h2>Edit Doctor</h2>
@@ -73,26 +74,26 @@ session_start();
    <?php if($error!="") echo "<p class='error_msg'>$error</p>";?>
    <form method="post" class="form">
 
-    <label> Username</label>
-    <input type="text" value="<?php echo htmlspecialchars($doctor["username"]); ?>" disabled>
+    <label> Username</label><br>
+    <input type="text" value="<?php echo htmlspecialchars($doctor["username"]); ?>" disabled>  <br> 
 
-    <label> Doctorname</label>
-    <input type="text" name="dname" value="<?php echo htmlspecialchars($doctor["dname"]); ?>" required>
+    <label> Doctorname</label><br>
+    <input type="text" name="dname" value="<?php echo htmlspecialchars($doctor["dname"]); ?>" required> <br>
 
-    <label> Phone</label>
-    <input type="text" name="phone" value="<?php echo htmlspecialchars($doctor["phone"]); ?>" required>
+    <label> Phone</label><br>
+    <input type="text" name="phone" value="<?php echo htmlspecialchars($doctor["phone"]); ?>" required> <br>
 
-    <label> Spacialist</label>
-    <input type="text" name="specialist" value="<?php echo htmlspecialchars($doctor["specialist"]); ?>" required>
+    <label> Spacialist</label><br>
+    <input type="text" name="specialist" value="<?php echo htmlspecialchars($doctor["specialist"]); ?>" required> <br>
      
-    <button type="submit" name="update" class="add_btn">Update</button>
+    <button type="submit" name="update" class="btn">Update</button><br>
 
 
 
 
 
    </form>
-
+</div>
 
 </body>
 </html>

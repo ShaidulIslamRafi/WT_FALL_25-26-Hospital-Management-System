@@ -39,7 +39,7 @@ session_start();
 </head>
 
 <body>
-
+<div class="doctor">  
 <div class="topbar">
     <h2>Doctor Details</h2>
     <a class="back_btn"href="../doctorPage.php">Back</a>
@@ -54,7 +54,7 @@ session_start();
 
 </div>
 
-
+</div> 
 
 
 </body>
