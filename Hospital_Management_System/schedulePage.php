@@ -2,16 +2,22 @@
    session_start();
    if(!isset($_SESSION["username"])){
     header("Location: loginPage.php");
+    exit;
    }
 
+   include "database.php";
+$sql = "SELECT s.sessiontitle, s.username, s.s_date_time, d.dname FROM session s LEFT JOIN doctor d ON d.username = s.username ORDER BY s.sessiontitle DESC ";
+
+$res = $conn->query($sql);
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title> </title>
-<link  rel="stylesheet" href="css/dashboard.css">
+<link  rel="stylesheet" href="css/doctor.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
@@ -63,7 +69,54 @@
                 
             </div>
     </div>
-    <h3 class="dashname"> Dashboard </h3>
+   
+    <div class="topbar">
+  <h2>Schedule Manager</h2>
+  <a class="add_btn" href="schedule/session_add.php">Add New</a>
+</div>
+
+
+<h3 class="sub">All Sessions (<?php echo $res->num_rows; ?>)</h3>
+
+<div class="table">
+  <table>
+    <thead>
+      <tr>
+        <th>Session ID</th>
+        <th>Doctor Username</th>
+        <th>Doctor Name</th>
+        <th>Date & Time</th>
+        <th>Events</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <?php if($res && $res->num_rows > 0){ ?>
+        <?php while($row = $res->fetch_assoc()){ ?>
+          <tr>
+            <td><?php echo htmlspecialchars($row["sessiontitle"]); ?></td>
+            <td><?php echo htmlspecialchars($row["username"]); ?></td>
+            <td><?php echo htmlspecialchars($row["dname"] ?? ""); ?></td>
+            <td><?php echo htmlspecialchars($row["s_date_time"]); ?></td>
+            
+              <td class="actions">
+                 <a class="view_btn" href="schedule/session_view.php?id=<?php echo $row['sessiontitle']; ?>"> View</a>
+                <a class="remove_btn" href="schedule/session_delete.php?id=<?php echo $row['sessiontitle']; ?>"onclick="return confirm('Delete this session?');"> Remove </a>
+              </td>
+          </tr>
+        <?php 
+        } ?>
+      <?php
+       } 
+      else { ?>
+        <tr>
+          <td colspan="5" style="text-align:center;">No sessions found</td>
+        </tr>
+      <?php } ?>
+    </tbody>
+  </table>
+</div>
+
                
     </div>
 

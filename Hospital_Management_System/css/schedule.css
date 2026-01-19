@@ -209,3 +209,67 @@ body{
 
              /*work on rightside lower*/
 
+.page_head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding: 20px 30px 10px 30px;
+}
+
+.page_head h2{
+  margin:0;
+  font-size:22px;
+  font-weight:700;
+  color:#111;
+}
+
+.add_btn{
+  text-decoration:none;
+  background:#2b5ec5;
+  color:#fff;
+  padding:10px 14px;
+  border-radius:8px;
+  font-weight:600;
+}
+
+.card{
+  margin: 10px 30px;
+  background:#fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.data_table{
+  width:100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.data_table th, .data_table td{
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align:left;
+}
+
+.data_table th{
+  background:#f2f2ff;
+}
+
+.btn_view{
+  padding:6px 10px;
+  background:#2b5ec5;
+  color:#fff;
+  text-decoration:none;
+  border-radius:6px;
+  margin-right: 6px;
+}
+
+.btn_remove{
+  padding:6px 10px;
+  background:#b72d37;
+  color:#fff;
+  text-decoration:none;
+  border-radius:6px;
+}
+
