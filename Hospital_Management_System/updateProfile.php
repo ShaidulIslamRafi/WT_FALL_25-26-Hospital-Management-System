@@ -96,28 +96,28 @@ else{
  </div>
  
 <label for="">FirstName:</label> <br>
-<input type="text" name="fname" value="<?php echo htmlspecialchars($user['fname']);?>"required><br><br>
+<input type="text" name="fname" value="<?php echo htmlspecialchars($user['fname']);?>"required><br>
 <label for="">LastName:</label><br>
-<input type="text" name="lname" value="<?php echo htmlspecialchars($user['lname']);?>"required><br><br>
+<input type="text" name="lname" value="<?php echo htmlspecialchars($user['lname']);?>"required><br>
  <label for="">Date Of Birth</label><br>
- <input type="date" name="dob" value="<?php echo htmlspecialchars($user['dob']);?>"required><br><br>
+ <input type="date" name="dob" value="<?php echo htmlspecialchars($user['dob']);?>"required><br>
 <label for="">Age:</label><br>
-<input type="text" name="age" value="<?php echo (int) $user['age'];?>"required><br><br>
+<input type="text" name="age" value="<?php echo (int) $user['age'];?>"required><br>
 
 <label>Current Password:</label><br>
-<input type="password" name="current_password"><br><br>
+<input type="password" name="current_password"><br>
 <label>New Password:</label><br>
-<input type="password" name="new_password"><br><br>
+<input type="password" name="new_password"><br>
 <label>Confirm New Password:</label><br>
-<input type="password" name="confirm_password"><br><br>
+<input type="password" name="confirm_password"><br>
 
 
 
 
 <input type="submit" name="submit" value="Update" ><br>
 </form>
-<br>
-<a href="dashboardPage.php">Back To DashBoard</a>
+<br> <br>
+<a href="dashboardPage.php" class="back_btn" >Back To DashBoard</a>
 
 
 </body>
