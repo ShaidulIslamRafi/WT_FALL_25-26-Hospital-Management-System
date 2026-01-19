@@ -5,23 +5,34 @@ require_once "php/db.php";
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  $email = trim($_POST["username"] ?? "");
+  $email = trim($_POST["email"] ?? "");
   $password = trim($_POST["password"] ?? "");
 
   if ($email === "" || $password === "") {
     $error = "Please enter email and password";
+  } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $error = "Please enter a valid email address";
   } else {
-    $stmt = mysqli_prepare($conn, "SELECT id, email, role FROM users WHERE email = ? AND password = ?");
-    mysqli_stmt_bind_param($stmt, "ss", $email, $password);
+    // ✅ login by EMAIL + PASSWORD
+    $stmt = mysqli_prepare($conn, "SELECT id, fname, lname, email, role, password FROM users WHERE email = ? LIMIT 1");
+    if (!$stmt) {
+      die("Query error: " . mysqli_error($conn));
+    }
+
+    mysqli_stmt_bind_param($stmt, "s", $email);
     mysqli_stmt_execute($stmt);
     $res = mysqli_stmt_get_result($stmt);
     $user = mysqli_fetch_assoc($res);
     mysqli_stmt_close($stmt);
 
-    if ($user) {
-      $_SESSION["username"] = $user["email"];
+    if ($user && $user["password"] === $password) {
+      // ✅ sessions
       $_SESSION["user_id"] = (int)$user["id"];
-      $_SESSION["role"] = $user["role"];
+      $_SESSION["email"]   = $user["email"];
+      $_SESSION["role"]    = $user["role"];
+
+      // optional display name
+      $_SESSION["display_name"] = trim(($user["fname"] ?? "") . " " . ($user["lname"] ?? ""));
 
       if ($user["role"] === "admin") {
         header("Location: adminPage.php");
@@ -58,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <?php endif; ?>
 
   <label style="top:30%;">Email:</label><br>
-  <input type="text" name="username" placeholder="Enter Email" style="top:35%;"><br><br>
+  <input type="text" name="email" placeholder="Enter Email" style="top:35%;" value="<?php echo htmlspecialchars($_POST["email"] ?? ""); ?>"><br><br>
 
   <label style="top:45%;">Password:</label><br>
   <input type="password" name="password" placeholder="Password" style="top:50%;"><br><br>
@@ -75,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     font-size:14px;
     font-weight:600;
     margin:0;
-    min-height:18px;   /* keeps bottom section visible */
+    min-height:18px;
   ">
     <?php echo ($error !== "") ? htmlspecialchars($error) : ""; ?>
   </p>

@@ -1,35 +1,119 @@
 <?php
 session_start();
-if (!isset($_SESSION["username"])) {
+require_once "php/db.php";
+
+/*
+  ✅ Email-login system:
+  You must set this in loginPage.php after successful login:
+  $_SESSION["email"] = $user["email"];
+*/
+
+if (!isset($_SESSION["email"])) {
   header("Location: loginPage.php");
   exit();
 }
-$username = htmlspecialchars($_SESSION["username"]);
 
-$doctors = [
-  ["name"=>"Dr. Sarah Ahmed", "dept"=>"Cardiology", "title"=>"Consultant", "status"=>"Available", "fee"=>"৳800", "time"=>"10:00 AM - 02:00 PM", "rating"=>4.8],
-  ["name"=>"Dr. Hasan Rahman", "dept"=>"Medicine", "title"=>"Specialist", "status"=>"In Session", "fee"=>"৳600", "time"=>"02:00 PM - 06:00 PM", "rating"=>4.6],
-  ["name"=>"Dr. Nabila Sultana", "dept"=>"Gynecology", "title"=>"Consultant", "status"=>"Available", "fee"=>"৳900", "time"=>"09:00 AM - 01:00 PM", "rating"=>4.9],
-  ["name"=>"Dr. Imran Hossain", "dept"=>"Orthopedics", "title"=>"Surgeon", "status"=>"Offline", "fee"=>"৳1000", "time"=>"—", "rating"=>4.5],
-  ["name"=>"Dr. Farzana Islam", "dept"=>"Dermatology", "title"=>"Specialist", "status"=>"Available", "fee"=>"৳700", "time"=>"04:00 PM - 08:00 PM", "rating"=>4.7],
-  ["name"=>"Dr. Mahmudul Hasan", "dept"=>"Pediatrics", "title"=>"Consultant", "status"=>"Available", "fee"=>"৳750", "time"=>"11:00 AM - 03:00 PM", "rating"=>4.6],
-];
+$email = $_SESSION["email"]; // raw for DB
+$safeEmail = htmlspecialchars($email);
 
-$q = strtolower(trim($_GET["q"] ?? ""));
+// ✅ Fetch user full name from DB
+$ustmt = mysqli_prepare($conn, "SELECT fname, lname, email FROM users WHERE email = ? LIMIT 1");
+mysqli_stmt_bind_param($ustmt, "s", $email);
+mysqli_stmt_execute($ustmt);
+$ures = mysqli_stmt_get_result($ustmt);
+$user = mysqli_fetch_assoc($ures);
+mysqli_stmt_close($ustmt);
+
+if (!$user) {
+  // user not found => destroy session
+  session_unset();
+  session_destroy();
+  header("Location: loginPage.php");
+  exit();
+}
+
+$fullName = trim(($user["fname"] ?? "") . " " . ($user["lname"] ?? ""));
+if ($fullName === "") $fullName = "Patient";
+$safeName = htmlspecialchars($fullName);
+$userEmail = $user["email"] ?? $email;
+$safeUserEmail = htmlspecialchars($userEmail);
+
+
+// ---------- Handle BOOK action ----------
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["book_doctor_id"])) {
+  $doctorId = (int)$_POST["book_doctor_id"];
+
+  // fetch doctor info
+  $dstmt = mysqli_prepare($conn, "SELECT name, dept, time_slot FROM doctors WHERE id=? LIMIT 1");
+  mysqli_stmt_bind_param($dstmt, "i", $doctorId);
+  mysqli_stmt_execute($dstmt);
+  $dres = mysqli_stmt_get_result($dstmt);
+  $doc = mysqli_fetch_assoc($dres);
+  mysqli_stmt_close($dstmt);
+
+  if ($doc) {
+    $bookDate = date("Y-m-d");
+    $bookTime = ($doc["time_slot"] && $doc["time_slot"] !== "—") ? $doc["time_slot"] : "10:00 AM - 12:00 PM";
+    $sessionTitle = "Doctor Appointment";
+    $dept = $doc["dept"];
+
+    // ✅ insert into your bookings table (based on your screenshot columns)
+    $bstmt = mysqli_prepare($conn, "
+      INSERT INTO bookings (username, doctor_id, session_title, dept, book_date, book_time, status)
+      VALUES (?, ?, ?, ?, ?, ?, 'Pending')
+    ");
+    mysqli_stmt_bind_param($bstmt, "sissss", $email, $doctorId, $sessionTitle, $dept, $bookDate, $bookTime);
+    mysqli_stmt_execute($bstmt);
+    mysqli_stmt_close($bstmt);
+  }
+
+  header("Location: doctorPage.php?booked=1");
+  exit();
+}
+
+
+// Filters
+$q = trim($_GET["q"] ?? "");
 $deptFilter = trim($_GET["dept"] ?? "");
 
-$filtered = array_filter($doctors, function($d) use ($q, $deptFilter) {
-  $matchQ = ($q === "") ||
-    (strpos(strtolower($d["name"]), $q) !== false) ||
-    (strpos(strtolower($d["dept"]), $q) !== false) ||
-    (strpos(strtolower($d["title"]), $q) !== false);
+// Departments dropdown
+$departments = [];
+$deptRes = mysqli_query($conn, "SELECT DISTINCT dept FROM doctors ORDER BY dept ASC");
+if ($deptRes) {
+  while ($row = mysqli_fetch_assoc($deptRes)) {
+    $departments[] = $row["dept"];
+  }
+}
 
-  $matchDept = ($deptFilter === "") || ($d["dept"] === $deptFilter);
-  return $matchQ && $matchDept;
-});
+// Fetch doctors with filters
+$sql = "SELECT id, name, dept, title, status, fee, time_slot, rating FROM doctors WHERE 1=1";
+$params = [];
+$types = "";
 
-$departments = array_values(array_unique(array_map(fn($d) => $d["dept"], $doctors)));
-sort($departments);
+if ($q !== "") {
+  $sql .= " AND (name LIKE ? OR dept LIKE ? OR title LIKE ?)";
+  $like = "%".$q."%";
+  $params[] = $like; $params[] = $like; $params[] = $like;
+  $types .= "sss";
+}
+if ($deptFilter !== "") {
+  $sql .= " AND dept = ?";
+  $params[] = $deptFilter;
+  $types .= "s";
+}
+$sql .= " ORDER BY name ASC";
+
+$stmt = mysqli_prepare($conn, $sql);
+if (!$stmt) die("Query prepare failed: " . mysqli_error($conn));
+if (!empty($params)) mysqli_stmt_bind_param($stmt, $types, ...$params);
+
+mysqli_stmt_execute($stmt);
+$res = mysqli_stmt_get_result($stmt);
+
+$filtered = [];
+while ($row = mysqli_fetch_assoc($res)) $filtered[] = $row;
+
+mysqli_stmt_close($stmt);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,169 +127,135 @@ sort($departments);
 </head>
 <body>
 
-  <div class="app">
-    <aside class="sidebar">
-      <div class="logoTitle">Menu</div>
+<div class="app">
 
-      <div class="profileBox">
-        <div class="avatar"><i class="fa-regular fa-user"></i></div>
-        <div class="profileText">
-          <div class="name"><?php echo $username; ?></div>
-          <div class="email">patient@edoc.com</div>
-        </div>
+  <aside class="sidebar">
+  
+
+    <!-- ✅ SHOW LIKE YOUR SCREENSHOT -->
+    <div class="profileBox">
+      <div class="avatar"><i class="fa-regular fa-user"></i></div>
+      <div class="profileText">
+        <div class="name"><?php echo $safeName; ?></div>
+        <div class="email"><?php echo $safeUserEmail; ?></div>
       </div>
+    </div>
 
-      <a class="logoutBtn" href="loginPage.php">Log out</a>
+    <a class="logoutBtn" href="logout.php">Log out</a>
 
-      <nav class="menu">
-        <a class="menuItem" href="dashboard.php">
-          <i class="fa-solid fa-house"></i><span>Home</span>
-        </a>
+    <nav class="menu">
+      <a class="menuItem" href="dashboard.php"><i class="fa-solid fa-house"></i><span>Home</span></a>
+      <a class="menuItem active" href="doctorPage.php"><i class="fa-solid fa-user-doctor"></i><span>All Doctors</span></a>
+      <a class="menuItem" href="scheduledSessions.php"><i class="fa-regular fa-calendar"></i><span>Scheduled Sessions</span></a>
+      <a class="menuItem" href="myBookings.php"><i class="fa-regular fa-bookmark"></i><span>My Bookings</span></a>
+      <a class="menuItem" href="settings.php"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
+    </nav>
+  </aside>
 
-        <a class="menuItem active" href="doctorPage.php">
-          <i class="fa-solid fa-user-doctor"></i><span>All Doctors</span>
-        </a>
+  <main class="main">
 
-        <a class="menuItem" href="scheduledSessions.php">
-          <i class="fa-regular fa-calendar"></i><span>Scheduled Sessions</span>
-        </a>
+    <div class="topbar">
+      <div>
+        <h1 class="pageTitle">All Doctors</h1>
+        <p class="subTitle">Search and filter doctors by department, status, and availability.</p>
 
-        <a class="menuItem" href="myBookings.php">
-  <span>My Bookings</span>
-</a>
-
-
-       <a class="menuItem" href="settings.php">Settings</a>
-
-      </nav>
-    </aside>
-
-    <main class="main">
-      <div class="topbar">
-        <div>
-          <h1 class="pageTitle">All Doctors</h1>
-          <p class="subTitle">Search and filter doctors by department, status, and availability.</p>
-        </div>
-
-        <div class="topRight">
-          <div class="userChip">
-            <i class="fa-regular fa-bell"></i>
-            <span class="userName"><?php echo $username; ?></span>
-            <i class="fa-solid fa-circle-user"></i>
-          </div>
-        </div>
-      </div>
-
-      <form class="filterBar" method="GET" action="">
-        <div class="searchBox">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input
-            type="text"
-            name="q"
-            value="<?php echo htmlspecialchars($_GET["q"] ?? ""); ?>"
-            placeholder="Search by name, department, title..."
-          />
-        </div>
-
-        <select class="selectBox" name="dept">
-          <option value="">All Departments</option>
-          <?php foreach ($departments as $dep): ?>
-            <option value="<?php echo htmlspecialchars($dep); ?>"
-              <?php echo ($deptFilter === $dep) ? "selected" : ""; ?>>
-              <?php echo htmlspecialchars($dep); ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
-
-        <button class="primaryBtn" type="submit">
-          <i class="fa-solid fa-filter"></i> Filter
-        </button>
-
-        <a class="ghostBtn" href="doctorPage.php">Reset</a>
-      </form>
-    
-      <div class="infoRow">
-        <div class="pill">
-          <span class="dot dotPurple"></span>
-          <span>Total:</span>
-          <b><?php echo count($filtered); ?></b>
-        </div>
-
-        <div class="hint">
-          Tip: Later you can connect database and click “Book” to create appointment.
-        </div>
-      </div>
-
-      <section class="grid">
-        <?php if (count($filtered) === 0): ?>
-          <div class="empty">
-            <div class="emptyIcon"><i class="fa-regular fa-face-frown"></i></div>
-            <h3>No doctors found</h3>
-            <p>Try changing the search text or selecting a different department.</p>
-          </div>
+        <?php if (isset($_GET["booked"])): ?>
+          <p style="margin-top:10px;font-weight:700;color:#16a34a;">✅ Booking added! Check “My Bookings”.</p>
         <?php endif; ?>
+      </div>
 
-        <?php foreach ($filtered as $d): ?>
-          <?php
-            $status = $d["status"];
-            $statusClass = "chipGray";
-            if ($status === "Available") $statusClass = "chipGreen";
-            if ($status === "In Session") $statusClass = "chipAmber";
-            if ($status === "Offline") $statusClass = "chipGray";
-          ?>
+      <div class="topRight">
+        <div class="userChip">
+          <i class="fa-regular fa-bell"></i>
+          <span class="userName"><?php echo $safeName; ?></span>
+          <i class="fa-solid fa-circle-user"></i>
+        </div>
+      </div>
+    </div>
 
-          <article class="card">
-            <div class="cardTop">
-              <div class="docAvatar">
-                <i class="fa-solid fa-user-doctor"></i>
-              </div>
+    <form class="filterBar" method="GET" action="">
+      <div class="searchBox">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" name="q" value="<?php echo htmlspecialchars($q); ?>" placeholder="Search by name, department, title..." />
+      </div>
 
-              <div class="cardMeta">
-                <h3 class="docName"><?php echo htmlspecialchars($d["name"]); ?></h3>
-                <p class="docSub">
-                  <?php echo htmlspecialchars($d["title"]); ?> • <?php echo htmlspecialchars($d["dept"]); ?>
-                </p>
-              </div>
+      <select class="selectBox" name="dept">
+        <option value="">All Departments</option>
+        <?php foreach ($departments as $dep): ?>
+          <option value="<?php echo htmlspecialchars($dep); ?>" <?php echo ($deptFilter === $dep) ? "selected" : ""; ?>>
+            <?php echo htmlspecialchars($dep); ?>
+          </option>
+        <?php endforeach; ?>
+      </select>
 
-              <span class="chip <?php echo $statusClass; ?>">
-                <?php echo htmlspecialchars($status); ?>
-              </span>
+      <button class="primaryBtn" type="submit"><i class="fa-solid fa-filter"></i> Filter</button>
+      <a class="ghostBtn" href="doctorPage.php">Reset</a>
+    </form>
+
+    <div class="infoRow">
+      <div class="pill">
+        <span class="dot dotPurple"></span>
+        <span>Total:</span>
+        <b><?php echo count($filtered); ?></b>
+      </div>
+      <div class="hint">Doctors loaded from database.</div>
+    </div>
+
+    <section class="grid">
+      <?php if (count($filtered) === 0): ?>
+        <div class="empty">
+          <div class="emptyIcon"><i class="fa-regular fa-face-frown"></i></div>
+          <h3>No doctors found</h3>
+          <p>Try changing the search text or selecting a different department.</p>
+        </div>
+      <?php endif; ?>
+
+      <?php foreach ($filtered as $d): ?>
+        <?php
+          $status = $d["status"];
+          $statusClass = "chipGray";
+          if ($status === "Available") $statusClass = "chipGreen";
+          if ($status === "In Session") $statusClass = "chipAmber";
+          if ($status === "Offline") $statusClass = "chipGray";
+        ?>
+
+        <article class="card">
+          <div class="cardTop">
+            <div class="docAvatar"><i class="fa-solid fa-user-doctor"></i></div>
+
+            <div class="cardMeta">
+              <h3 class="docName"><?php echo htmlspecialchars($d["name"]); ?></h3>
+              <p class="docSub"><?php echo htmlspecialchars($d["title"]); ?> • <?php echo htmlspecialchars($d["dept"]); ?></p>
             </div>
 
-            <div class="cardBody">
-              <div class="statRow">
-                <div class="stat">
-                  <div class="statLabel">Rating</div>
-                  <div class="statValue">
-                    <i class="fa-solid fa-star"></i> <?php echo htmlspecialchars($d["rating"]); ?>
-                  </div>
-                </div>
-                <div class="stat">
-                  <div class="statLabel">Consultation</div>
-                  <div class="statValue"><?php echo htmlspecialchars($d["fee"]); ?></div>
-                </div>
-                <div class="stat">
-                  <div class="statLabel">Time</div>
-                  <div class="statValue"><?php echo htmlspecialchars($d["time"]); ?></div>
-                </div>
-              </div>
+            <span class="chip <?php echo $statusClass; ?>"><?php echo htmlspecialchars($status); ?></span>
+          </div>
 
-              <div class="actions">
-                <button class="secondaryBtn" type="button">
-                  <i class="fa-regular fa-comment-dots"></i> Message
-                </button>
-                <button class="bookBtn" type="button">
+          <div class="cardBody">
+            <div class="statRow">
+              <div class="stat"><div class="statLabel">Rating</div><div class="statValue"><i class="fa-solid fa-star"></i> <?php echo htmlspecialchars($d["rating"]); ?></div></div>
+              <div class="stat"><div class="statLabel">Consultation</div><div class="statValue"><?php echo htmlspecialchars($d["fee"]); ?></div></div>
+              <div class="stat"><div class="statLabel">Time</div><div class="statValue"><?php echo htmlspecialchars($d["time_slot"]); ?></div></div>
+            </div>
+
+            <div class="actions">
+              <button class="secondaryBtn" type="button"><i class="fa-regular fa-comment-dots"></i> Message</button>
+
+              <form method="POST" action="" style="margin:0;">
+                <input type="hidden" name="book_doctor_id" value="<?php echo (int)$d["id"]; ?>">
+                <button class="bookBtn" type="submit">
                   <i class="fa-regular fa-calendar-check"></i> Book
                 </button>
-              </div>
+              </form>
             </div>
-          </article>
-        <?php endforeach; ?>
-      </section>
 
-    </main>
+          </div>
+        </article>
+      <?php endforeach; ?>
+    </section>
 
-  </div>
+  </main>
+</div>
 
 </body>
 </html>
