@@ -14,9 +14,6 @@ if (isset($_SESSION["role"]) && $_SESSION["role"] !== "patient") {
 
 $userId = (int)$_SESSION["user_id"];
 
-/* =========================
-   Fetch user info (fname + lname + email)
-========================= */
 $stmt = mysqli_prepare($conn, "SELECT fname, lname, email FROM users WHERE id = ? LIMIT 1");
 mysqli_stmt_bind_param($stmt, "i", $userId);
 mysqli_stmt_execute($stmt);
@@ -35,10 +32,6 @@ $fullName = trim(($user["fname"] ?? "") . " " . ($user["lname"] ?? ""));
 if ($fullName === "") $fullName = "Patient";
 $userEmail = $user["email"] ?? "";
 
-/* =========================
-   TODAY SESSIONS (from booking table)
-   - sessions that are booked today by any user
-========================= */
 $todaySessions = [];
 $todaySql = "
   SELECT 
@@ -51,20 +44,22 @@ $todaySql = "
   FROM bookings b
   LEFT JOIN doctors d ON b.doctor_id = d.id
   WHERE b.book_date = CURDATE()
+    AND b.username = ? 
   ORDER BY b.book_time ASC
 ";
 
-$todayRes = mysqli_query($conn, $todaySql);
+$stmtToday = mysqli_prepare($conn, $todaySql);
+mysqli_stmt_bind_param($stmtToday, "s", $userEmail);
+mysqli_stmt_execute($stmtToday);
+$todayRes = mysqli_stmt_get_result($stmtToday);
+
 if ($todayRes) {
   while ($row = mysqli_fetch_assoc($todayRes)) {
     $todaySessions[] = $row;
   }
 }
+mysqli_stmt_close($stmtToday);
 
-/* =========================
-   UPCOMING BOOKINGS (for logged-in user only)
-   - booking table stores user email in username column
-========================= */
 $upcomingBookings = [];
 $bookingSql = "
   SELECT 
@@ -82,7 +77,6 @@ $bookingSql = "
   ORDER BY b.book_date ASC, b.book_time ASC
   LIMIT 5
 ";
-
 
 $stmt2 = mysqli_prepare($conn, $bookingSql);
 if (!$stmt2) {
@@ -103,27 +97,22 @@ mysqli_stmt_close($stmt2);
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard</title>
-
   <link rel="stylesheet" href="css/dashboard.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
 <div class="app">
-
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="profileBox">
       <div class="avatar"><i class="fa-regular fa-user"></i></div>
       <div class="profileText">
-        <!-- ✅ show NAME -->
-        <div class="name"><?php echo htmlspecialchars($fullName); ?></div>
-        <!-- ✅ show email small -->
+        <div class="name"><strong><?php echo htmlspecialchars($fullName); ?></strong></div>
         <div class="email"><?php echo htmlspecialchars($userEmail); ?></div>
       </div>
     </div>
 
-    <a class="logoutBtn" href="loginPage.php">Log out</a>
+    <a class="logoutBtn" href="logout.php">Log out</a>
 
     <nav class="menu">
       <a class="menuItem active" href="dashboard.php">
@@ -144,12 +133,9 @@ mysqli_stmt_close($stmt2);
     </nav>
   </aside>
 
-  <!-- MAIN -->
   <main class="main">
-
     <div class="topbar">
       <h1 class="pageTitle">Home</h1>
-
       <div class="dateBox">
         <div class="dateText">
           <div class="small">Today's Date</div>
@@ -161,18 +147,12 @@ mysqli_stmt_close($stmt2);
       </div>
     </div>
 
-    <!-- HERO -->
     <section class="hero">
       <div class="heroText">
         <div class="welcome">Welcome!</div>
         <div class="heroName"><?php echo htmlspecialchars($fullName); ?>.</div>
-
-        <p class="heroDesc">
-          View today’s sessions and your upcoming bookings.
-        </p>
-
+        <p class="heroDesc">View today’s sessions and your upcoming bookings.</p>
         <div class="heroSearchTitle">Quick Search (UI only)</div>
-
         <div class="searchRow">
           <div class="searchInput">
             <i class="fa-solid fa-magnifying-glass"></i>
@@ -181,17 +161,12 @@ mysqli_stmt_close($stmt2);
           <button class="searchBtn" type="button">Search</button>
         </div>
       </div>
-
       <div class="heroImage" aria-hidden="true"></div>
     </section>
 
-    <!-- ONLY 2 SECTIONS -->
     <section class="lower">
-
-      <!-- TODAY SESSIONS -->
       <div class="leftCol">
         <h2 class="sectionTitle">Today Sessions</h2>
-
         <div class="tableCard">
           <table>
             <thead>
@@ -203,10 +178,9 @@ mysqli_stmt_close($stmt2);
                 <th>Status</th>
               </tr>
             </thead>
-
             <tbody>
               <?php if (count($todaySessions) === 0): ?>
-                <tr><td colspan="5">No sessions for today.</td></tr>
+                <tr><td colspan="5" style="text-align:center; padding:20px;">No sessions for today.</td></tr>
               <?php else: ?>
                 <?php foreach ($todaySessions as $s): ?>
                   <tr>
@@ -223,10 +197,8 @@ mysqli_stmt_close($stmt2);
         </div>
       </div>
 
-      <!-- UPCOMING BOOKINGS -->
       <div class="rightCol">
         <h2 class="sectionTitle">Your Upcoming Booking</h2>
-
         <div class="tableCard">
           <table>
             <thead>
@@ -238,10 +210,9 @@ mysqli_stmt_close($stmt2);
                 <th>Status</th>
               </tr>
             </thead>
-
             <tbody>
               <?php if (count($upcomingBookings) === 0): ?>
-                <tr><td colspan="5">No upcoming bookings.</td></tr>
+                <tr><td colspan="5" style="text-align:center; padding:20px;">No upcoming bookings.</td></tr>
               <?php else: ?>
                 <?php foreach ($upcomingBookings as $b): ?>
                   <tr>
@@ -257,9 +228,7 @@ mysqli_stmt_close($stmt2);
           </table>
         </div>
       </div>
-
     </section>
-
   </main>
 </div>
 
@@ -269,6 +238,5 @@ mysqli_stmt_close($stmt2);
   document.getElementById("todayDate").textContent =
     d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate());
 </script>
-
 </body>
 </html>

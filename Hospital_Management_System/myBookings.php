@@ -9,7 +9,7 @@ if (!isset($_SESSION["email"])) {
 
 $email = $_SESSION["email"];
 
-// ✅ Fetch user full name
+
 $ustmt = mysqli_prepare($conn, "SELECT fname, lname, email FROM users WHERE email=? LIMIT 1");
 mysqli_stmt_bind_param($ustmt, "s", $email);
 mysqli_stmt_execute($ustmt);
@@ -30,7 +30,7 @@ if ($fullName === "") $fullName = "Patient";
 $safeName = htmlspecialchars($fullName);
 $safeEmail = htmlspecialchars($user["email"] ?? $email);
 
-/* Demo bookings (replace with DB later) */
+
 $bookings = [
   ["id"=>1, "session"=>"Heart Checkup", "doctor"=>"Dr. Sarah Ahmed", "dept"=>"Cardiology", "date"=>"2026-03-01", "time"=>"10:00 AM - 12:00 PM", "status"=>"Pending"],
   ["id"=>2, "session"=>"General Medicine OPD", "doctor"=>"Dr. Hasan Rahman", "dept"=>"Medicine", "date"=>"2026-03-02", "time"=>"02:00 PM - 04:00 PM", "status"=>"Confirmed"],
@@ -61,7 +61,7 @@ $bookings = [
       </div>
     </div>
 
-    <a class="logoutBtn" href="logout.php">Log out</a>
+    <a class="logoutBtn" href="loginPage.php">Log out</a>
 
     <nav class="menu">
       <a class="menuItem" href="dashboard.php"><i class="fa-solid fa-house"></i><span>Home</span></a>
@@ -112,7 +112,7 @@ $bookings = [
               <td><?php echo htmlspecialchars($b["time"]); ?></td>
               <td><span class="status <?php echo $statusClass; ?>"><?php echo htmlspecialchars($b["status"]); ?></span></td>
               <td>
-                <!-- ✅ Delete button -->
+
                 <button class="dangerBtn" type="button">Delete</button>
               </td>
             </tr>

@@ -65,7 +65,7 @@ $sessions = [
       </div>
     </div>
 
-    <a class="logoutBtn" href="logout.php">Log out</a>
+    <a class="logoutBtn" href="loginPage.php">Log out</a>
 
     <nav class="menu">
       <a class="menuItem" href="dashboard.php"><i class="fa-solid fa-house"></i><span>Home</span></a>

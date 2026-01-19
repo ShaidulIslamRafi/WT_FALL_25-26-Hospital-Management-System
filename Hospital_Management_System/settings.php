@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["update_profile"])) {
   }
 }
 
-/* Handle Password Update */
+
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["update_password"])) {
   $current = $_POST["current_password"];
   $new1    = $_POST["new_password"];
@@ -96,7 +96,7 @@ $fullname = $user["fname"] . " " . $user["lname"];
       </div>
     </div>
 
-    <a class="logoutBtn" href="logout.php">Log out</a>
+    <a class="logoutBtn" href="loginPage.php">Log out</a>
 
     <nav class="menu">
       <a class="menuItem" href="dashboard.php">Home</a>

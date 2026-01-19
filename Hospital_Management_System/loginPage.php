@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $error = "Please enter a valid email address";
   } else {
-    // ✅ login by EMAIL + PASSWORD
+
     $stmt = mysqli_prepare($conn, "SELECT id, fname, lname, email, role, password FROM users WHERE email = ? LIMIT 1");
     if (!$stmt) {
       die("Query error: " . mysqli_error($conn));
@@ -26,12 +26,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     mysqli_stmt_close($stmt);
 
     if ($user && $user["password"] === $password) {
-      // ✅ sessions
+
       $_SESSION["user_id"] = (int)$user["id"];
       $_SESSION["email"]   = $user["email"];
       $_SESSION["role"]    = $user["role"];
 
-      // optional display name
+
       $_SESSION["display_name"] = trim(($user["fname"] ?? "") . " " . ($user["lname"] ?? ""));
 
       if ($user["role"] === "admin") {

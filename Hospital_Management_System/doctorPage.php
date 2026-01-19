@@ -2,21 +2,16 @@
 session_start();
 require_once "php/db.php";
 
-/*
-  ✅ Email-login system:
-  You must set this in loginPage.php after successful login:
-  $_SESSION["email"] = $user["email"];
-*/
 
 if (!isset($_SESSION["email"])) {
   header("Location: loginPage.php");
   exit();
 }
 
-$email = $_SESSION["email"]; // raw for DB
+$email = $_SESSION["email"];
 $safeEmail = htmlspecialchars($email);
 
-// ✅ Fetch user full name from DB
+
 $ustmt = mysqli_prepare($conn, "SELECT fname, lname, email FROM users WHERE email = ? LIMIT 1");
 mysqli_stmt_bind_param($ustmt, "s", $email);
 mysqli_stmt_execute($ustmt);
@@ -25,7 +20,7 @@ $user = mysqli_fetch_assoc($ures);
 mysqli_stmt_close($ustmt);
 
 if (!$user) {
-  // user not found => destroy session
+
   session_unset();
   session_destroy();
   header("Location: loginPage.php");
@@ -39,11 +34,10 @@ $userEmail = $user["email"] ?? $email;
 $safeUserEmail = htmlspecialchars($userEmail);
 
 
-// ---------- Handle BOOK action ----------
+
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["book_doctor_id"])) {
   $doctorId = (int)$_POST["book_doctor_id"];
 
-  // fetch doctor info
   $dstmt = mysqli_prepare($conn, "SELECT name, dept, time_slot FROM doctors WHERE id=? LIMIT 1");
   mysqli_stmt_bind_param($dstmt, "i", $doctorId);
   mysqli_stmt_execute($dstmt);
@@ -57,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["book_doctor_id"])) {
     $sessionTitle = "Doctor Appointment";
     $dept = $doc["dept"];
 
-    // ✅ insert into your bookings table (based on your screenshot columns)
+
     $bstmt = mysqli_prepare($conn, "
       INSERT INTO bookings (username, doctor_id, session_title, dept, book_date, book_time, status)
       VALUES (?, ?, ?, ?, ?, ?, 'Pending')
@@ -72,11 +66,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["book_doctor_id"])) {
 }
 
 
-// Filters
+
 $q = trim($_GET["q"] ?? "");
 $deptFilter = trim($_GET["dept"] ?? "");
 
-// Departments dropdown
+
 $departments = [];
 $deptRes = mysqli_query($conn, "SELECT DISTINCT dept FROM doctors ORDER BY dept ASC");
 if ($deptRes) {
@@ -85,7 +79,7 @@ if ($deptRes) {
   }
 }
 
-// Fetch doctors with filters
+
 $sql = "SELECT id, name, dept, title, status, fee, time_slot, rating FROM doctors WHERE 1=1";
 $params = [];
 $types = "";
@@ -132,7 +126,7 @@ mysqli_stmt_close($stmt);
   <aside class="sidebar">
   
 
-    <!-- ✅ SHOW LIKE YOUR SCREENSHOT -->
+
     <div class="profileBox">
       <div class="avatar"><i class="fa-regular fa-user"></i></div>
       <div class="profileText">
@@ -141,7 +135,7 @@ mysqli_stmt_close($stmt);
       </div>
     </div>
 
-    <a class="logoutBtn" href="logout.php">Log out</a>
+    <a class="logoutBtn" href="loginPage.php">Log out</a>
 
     <nav class="menu">
       <a class="menuItem" href="dashboard.php"><i class="fa-solid fa-house"></i><span>Home</span></a>
@@ -160,7 +154,7 @@ mysqli_stmt_close($stmt);
         <p class="subTitle">Search and filter doctors by department, status, and availability.</p>
 
         <?php if (isset($_GET["booked"])): ?>
-          <p style="margin-top:10px;font-weight:700;color:#16a34a;">✅ Booking added! Check “My Bookings”.</p>
+          <p style="margin-top:10px;font-weight:700;color:#16a34a;"> Booking added! Check “My Bookings”.</p>
         <?php endif; ?>
       </div>
 
