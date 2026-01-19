@@ -67,7 +67,7 @@ body{
    
     position:absolute;
     bottom:20px;
-    top: 150%;
+    top: 120%;
     left:17%;
     width:100%;
     font-size: 20px;
@@ -161,6 +161,7 @@ body{
     justify-content: space-between;
     align-items: center; 
     flex-wrap: wrap;
+    gap:20px;
 
 }
 .value .box{
@@ -211,11 +212,7 @@ body{
 
 
 .dash-panels{
-  margin-left: 310px;
-  padding: 20px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px;
+  align-items: start;
 }
 
 /* panel box */
@@ -223,19 +220,25 @@ body{
   background: #fff;
   border: 1px solid #ddd;
   padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 /* title */
 .dash-panels .panel h2{
-  margin-bottom: 10px;
+  margin: 0 0 10px 0;
+  padding: 0;
   font-size: 20px;
-  font-weight: bold;
+  line-height: 1.2;
+
 }
 
 /* table */
 .dash-panels table{
   width: 100%;
   border-collapse: collapse;
+  margin: 0;
 }
 
 /* table cells */

@@ -63,29 +63,7 @@ body{
     transition:0.3s ease;
 }
 
-.main .item ul li.logout {
-   
-    position:absolute;
-    bottom:20px;
-    top: 230%;
-    left:17%;
-    width:100%;
-    font-size: 20px;
-    
-   
-}
 
-.main .item ul li.logout a{
-      background:transparent;
-      display:flex;
-      align-items: center;
-
-     
-}
-.main .item ul li.logout i{
-      background-color:#b72d37;
-     
-}
 
  /*work on rightside uper*/
 
@@ -306,4 +284,27 @@ body{
   border: none;
   border-radius: 6px;
   cursor: pointer;
+}
+.main .item ul li.logout {
+   
+    position:absolute;
+    bottom:20px;
+    top: 120%;
+    left:17%;
+    width:100%;
+    font-size: 20px;
+    
+   
+}
+
+.main .item ul li.logout a{
+      background:transparent;
+      display:flex;
+      align-items: center;
+
+     
+}
+.main .item ul li.logout i{
+      background-color:#b72d37;
+     
 }

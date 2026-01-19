@@ -116,7 +116,7 @@ $sesRes = $conn->query($sesSql);
 
            <h2>All Appointments</h2>
 
-<table border="1" cellpadding="8" cellspacing="0">
+<table border="1" cellpadding="8" cellspacing="4">
     <tr>
         <th>Appointment No</th>
         <th>Username</th>
@@ -140,13 +140,13 @@ $sesRes = $conn->query($sesSql);
     <?php } ?>
 </table>
 
-<br><br>
+
 </div>
 
 <div class="panel">
 <h2>All Sessions</h2>
 
-<table border="1" cellpadding="8" cellspacing="0">
+<table border="1" cellpadding="8" cellspacing="4">
     <tr>
         <th>Session Title (ID)</th>
         <th>Username</th>
