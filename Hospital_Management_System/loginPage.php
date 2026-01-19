@@ -1,5 +1,8 @@
 <?php  
     session_start();
+
+
+    
     include "database.php";
   $error="";
 if(isset($_POST["submit"])){
@@ -30,7 +33,7 @@ if(isset($_POST["submit"])){
    $_SESSION["username"]=$user["username"];
    $_SESSION["roles"]=$user["roles"];
 
-      setcookie("username",$user["username"],time()+(86400*7),"/");
+      setcookie("username",$user["username"],time()+(86400*2),"/");
   
     header("Location:dashboardPage.php");
    
