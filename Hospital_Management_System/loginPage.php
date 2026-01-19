@@ -27,13 +27,6 @@ if(isset($_POST["submit"])){
       }
       else{
 
-      
-
-
-
-
-
-
    $_SESSION["username"]=$user["username"];
    $_SESSION["roles"]=$user["roles"];
 

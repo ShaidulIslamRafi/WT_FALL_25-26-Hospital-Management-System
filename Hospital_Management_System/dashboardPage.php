@@ -13,10 +13,6 @@ $sesSql = "SELECT sessiontitle, username, s_date_time FROM session ORDER BY sess
 $sesRes = $conn->query($sesSql);
 ?>
 
-
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,7 +37,7 @@ $sesRes = $conn->query($sesSql);
             <li><a href="doctorPage.php"><i class="fas fa-user-md"></i>Doctors</a></li>
             <li><a href="schedulePage.php"><i class="fas fa-clock"></i>Schedule</a></li>
             <li><a href="appointmentPage.php"><i class="fas fa-calendar-check"></i>Appointment</a></li>
-            <li><a href="updateProfile.php"><i class="fas fa-procedures"></i>Update Profile</a></li>
+            <li><a href="updateProfile.php"><i class="fas fa-user-edit"></i>Update Profile</a></li>
             <li class="logout"><a href="logout.php"><i class="fas fa-sign-out-alt"></i>LogOut</a></li>
         </ul>
     </div>
@@ -82,28 +78,28 @@ $sesRes = $conn->query($sesSql);
                <!-- work on rightside middle-->
     <div class="value">
         <div class="box">
-            <i class="fas fa-users"></i>
+            <i class="fas fa-user-md"></i>
             <div>
                 <h3 id="doctorCount">0</h3>
                 <span>Doctors</span>
             </div>
         </div>
          <div class="box">
-            <i class="fas fa-users"></i>
+            <i class="fas fa-user-injured"></i>
             <div>
                 <h3 id="patientCount">0</h3>
                 <span>Patients</span>
             </div>
         </div>
          <div class="box">
-            <i class="fas fa-users"></i>
+            <i class="fas fa-calendar-check"></i>
             <div>
                 <h3 id="bookingCount">0</h3>
                 <span>Total Booking</span>
             </div>
         </div>
          <div class="box">
-            <i class="fas fa-users"></i>
+            <i class="fas fa-calendar-day"></i>
             <div>
                 <h3 id="todayBookingCount"></h3>
                 <span>Today Booking</span>
@@ -182,16 +178,10 @@ $sesRes = $conn->query($sesSql);
 
 
     </div>
-
 </section>
-
 </div>
-
-
 </body>
 
 <script src="javaScript/ajax.js"></script>
-
-
 
 </html>

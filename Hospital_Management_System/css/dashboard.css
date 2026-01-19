@@ -166,7 +166,7 @@ body{
 }
 .value .box{
     background:hsl(0, 3%, 94%);
-    width:250px;
+    width:270px;
     padding:16px 20px;
     border-radius:5px;
     display:flex;
