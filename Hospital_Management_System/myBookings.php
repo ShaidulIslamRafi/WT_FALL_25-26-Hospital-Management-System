@@ -2,20 +2,25 @@
 session_start();
 require_once "php/db.php";
 
-if (!isset($_SESSION["email"])) {
+if (!isset($_SESSION["email"]) || !isset($_SESSION["user_id"])) {
   header("Location: loginPage.php");
   exit();
 }
 
-$email = $_SESSION["email"];
+if (isset($_SESSION["role"]) && $_SESSION["role"] !== "patient") {
+  header("Location: adminPage.php");
+  exit();
+}
 
+$userEmail = $_SESSION["email"];
+$userId = (int)$_SESSION["user_id"];
 
-$ustmt = mysqli_prepare($conn, "SELECT fname, lname, email FROM users WHERE email=? LIMIT 1");
-mysqli_stmt_bind_param($ustmt, "s", $email);
-mysqli_stmt_execute($ustmt);
-$ures = mysqli_stmt_get_result($ustmt);
-$user = mysqli_fetch_assoc($ures);
-mysqli_stmt_close($ustmt);
+$stmtU = mysqli_prepare($conn, "SELECT fname, lname, email FROM users WHERE id=? LIMIT 1");
+mysqli_stmt_bind_param($stmtU, "i", $userId);
+mysqli_stmt_execute($stmtU);
+$resU = mysqli_stmt_get_result($stmtU);
+$user = mysqli_fetch_assoc($resU);
+mysqli_stmt_close($stmtU);
 
 if (!$user) {
   session_unset();
@@ -24,18 +29,38 @@ if (!$user) {
   exit();
 }
 
-$fullName = trim(($user["fname"] ?? "")." ".($user["lname"] ?? ""));
+$fullName = trim(($user["fname"] ?? "") . " " . ($user["lname"] ?? ""));
 if ($fullName === "") $fullName = "Patient";
+$safeEmail = htmlspecialchars($user["email"] ?? "");
 
-$safeName = htmlspecialchars($fullName);
-$safeEmail = htmlspecialchars($user["email"] ?? $email);
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["delete_booking_id"])) {
+  $bid = (int)$_POST["delete_booking_id"];
 
+  $del = mysqli_prepare($conn, "DELETE FROM bookings WHERE id = ? AND username = ?");
+  mysqli_stmt_bind_param($del, "is", $bid, $userEmail);
+  mysqli_stmt_execute($del);
+  mysqli_stmt_close($del);
 
-$bookings = [
-  ["id"=>1, "session"=>"Heart Checkup", "doctor"=>"Dr. Sarah Ahmed", "dept"=>"Cardiology", "date"=>"2026-03-01", "time"=>"10:00 AM - 12:00 PM", "status"=>"Pending"],
-  ["id"=>2, "session"=>"General Medicine OPD", "doctor"=>"Dr. Hasan Rahman", "dept"=>"Medicine", "date"=>"2026-03-02", "time"=>"02:00 PM - 04:00 PM", "status"=>"Confirmed"],
-  ["id"=>3, "session"=>"Psychiatry Appointment", "doctor"=>"Dr. Ayesha Rahman", "dept"=>"Psychiatry", "date"=>"2026-03-05", "time"=>"10:00 AM - 12:00 PM", "status"=>"Cancelled"],
-];
+  header("Location: myBookings.php?deleted=1");
+  exit();
+}
+
+$bookings = [];
+$sql = "
+  SELECT b.id, b.session_title, b.dept, b.book_date, b.book_time, b.status,
+         d.name AS doctor_name
+  FROM bookings b
+  LEFT JOIN doctors d ON b.doctor_id = d.id
+  WHERE b.username = ?
+  ORDER BY b.book_date DESC, b.created_at DESC
+";
+$st = mysqli_prepare($conn, $sql);
+mysqli_stmt_bind_param($st, "s", $userEmail);
+mysqli_stmt_execute($st);
+$rs = mysqli_stmt_get_result($st);
+
+while ($row = mysqli_fetch_assoc($rs)) $bookings[] = $row;
+mysqli_stmt_close($st);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,16 +77,15 @@ $bookings = [
 <div class="app">
 
   <aside class="sidebar">
-
     <div class="profileBox">
       <div class="avatar"><i class="fa-regular fa-user"></i></div>
       <div class="profileText">
-        <div class="name"><?php echo $safeName; ?></div>
+        <div class="name"><?php echo htmlspecialchars($fullName); ?></div>
         <div class="email"><?php echo $safeEmail; ?></div>
       </div>
     </div>
 
-    <a class="logoutBtn" href="loginPage.php">Log out</a>
+    <a class="logoutBtn" href="logout.php">Log out</a>
 
     <nav class="menu">
       <a class="menuItem" href="dashboard.php"><i class="fa-solid fa-house"></i><span>Home</span></a>
@@ -70,15 +94,17 @@ $bookings = [
       <a class="menuItem active" href="myBookings.php"><i class="fa-regular fa-bookmark"></i><span>My Bookings</span></a>
       <a class="menuItem" href="settings.php"><i class="fa-solid fa-gear"></i><span>Settings</span></a>
     </nav>
-
   </aside>
 
   <main class="main">
-
     <div class="topbar">
       <div>
         <h1 class="pageTitle">My Bookings</h1>
-        <p class="subTitle">View, track, and delete your bookings.</p>
+        <p class="subTitle">Here you can delete any booking.</p>
+
+        <?php if (isset($_GET["deleted"])): ?>
+          <p style="margin-top:10px;font-weight:800;color:#ef4444;"> Booking deleted.</p>
+        <?php endif; ?>
       </div>
     </div>
 
@@ -97,31 +123,37 @@ $bookings = [
         </thead>
 
         <tbody>
-          <?php foreach ($bookings as $b): ?>
-            <?php
-              $statusClass = "statusGray";
-              if ($b["status"] === "Confirmed") $statusClass = "statusGreen";
-              if ($b["status"] === "Pending") $statusClass = "statusAmber";
-              if ($b["status"] === "Cancelled") $statusClass = "statusRed";
-            ?>
-            <tr>
-              <td><?php echo htmlspecialchars($b["session"]); ?></td>
-              <td><?php echo htmlspecialchars($b["doctor"]); ?></td>
-              <td><?php echo htmlspecialchars($b["dept"]); ?></td>
-              <td><?php echo htmlspecialchars($b["date"]); ?></td>
-              <td><?php echo htmlspecialchars($b["time"]); ?></td>
-              <td><span class="status <?php echo $statusClass; ?>"><?php echo htmlspecialchars($b["status"]); ?></span></td>
-              <td>
-
-                <button class="dangerBtn" type="button">Delete</button>
-              </td>
-            </tr>
-          <?php endforeach; ?>
+          <?php if (count($bookings) === 0): ?>
+            <tr><td colspan="7">No bookings found.</td></tr>
+          <?php else: ?>
+            <?php foreach ($bookings as $b): ?>
+              <?php
+                $status = $b["status"] ?? "Pending";
+                $statusClass = "statusGray";
+                if ($status === "Confirmed") $statusClass = "statusGreen";
+                if ($status === "Pending") $statusClass = "statusAmber";
+                if ($status === "Cancelled") $statusClass = "statusRed";
+              ?>
+              <tr>
+                <td><?php echo htmlspecialchars($b["session_title"]); ?></td>
+                <td><?php echo htmlspecialchars($b["doctor_name"] ?? "Unknown"); ?></td>
+                <td><?php echo htmlspecialchars($b["dept"]); ?></td>
+                <td><?php echo htmlspecialchars($b["book_date"]); ?></td>
+                <td><?php echo htmlspecialchars($b["book_time"]); ?></td>
+                <td><span class="status <?php echo $statusClass; ?>"><?php echo htmlspecialchars($status); ?></span></td>
+                <td>
+                  <form method="POST" action="" onsubmit="return confirm('Delete this booking?');" style="margin:0;">
+                    <input type="hidden" name="delete_booking_id" value="<?php echo (int)$b["id"]; ?>">
+                    <button class="dangerBtn" type="submit">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          <?php endif; ?>
         </tbody>
 
       </table>
     </div>
-
   </main>
 
 </div>
