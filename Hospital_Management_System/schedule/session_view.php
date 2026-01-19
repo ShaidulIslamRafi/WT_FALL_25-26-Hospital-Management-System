@@ -28,10 +28,10 @@ if(!$row) die("Session not found");
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>View Session</title>
-  <link rel="stylesheet" href="../css/schedule.css">
+  <link rel="stylesheet" href="../css/doctor.css">
 </head>
 <body>
-
+        <div class="doctor">       
 <div class="topbar">
   <h2>Session Details</h2>
   <a class="back_btn" href="../schedulePage.php">Back</a>
@@ -45,6 +45,6 @@ if(!$row) die("Session not found");
   <p><b>Phone:</b> <?php echo htmlspecialchars($row["phone"] ?? ""); ?></p>
   <p><b>Date & Time:</b> <?php echo htmlspecialchars($row["s_date_time"]); ?></p>
 </div>
-
+</div>   
 </body>
 </html>

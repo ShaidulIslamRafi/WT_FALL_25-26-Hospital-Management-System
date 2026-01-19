@@ -1,12 +1,12 @@
 <?php
 session_start();
 if(!isset($_SESSION["username"])){
-  header("Location: ../loginPage.php");
+  header("Location:../loginPage.php");
   exit;
 }
 
 if(isset($_SESSION["roles"]) && $_SESSION["roles"] !== "admin"){
-  header("Location: ../loginPage.php");
+  header("Location:../loginPage.php");
   exit;
 }
 include "../database.php";

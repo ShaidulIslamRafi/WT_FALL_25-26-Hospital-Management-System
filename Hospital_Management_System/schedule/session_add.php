@@ -44,22 +44,23 @@ if(isset($_POST["save"])){
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Session</title>
-  <link rel="stylesheet" href="../css/schedule.css">
+  <link rel="stylesheet" href="../css/doctor.css">
 </head>
 <body>
 
+<div class="doctor">  
 <div class="topbar">
   <h2>Add New Session</h2>
-  <a class="back_btn" href="../schedulePage.php">Back</a>
+  <a class="btn_back" href="../schedulePage.php">Back</a>
 </div>
 
 <?php if($error!="") echo "<p class='error_msg'>$error</p>"; ?>
 
 <form method="post" class="form">
 
-  <label>Doctor</label>
+  <label>Doctor</label><br>
   <select name="username" required>
-    <option value="">Select Doctor</option>
+    <option value="">Select Doctor</option><br>
     <?php if($docRes && $docRes->num_rows>0){ ?>
       <?php while($d = $docRes->fetch_assoc()){ ?>
         <option value="<?php echo htmlspecialchars($d["username"]); ?>">
@@ -69,12 +70,12 @@ if(isset($_POST["save"])){
     <?php } ?>
   </select>
 
-  <label>Scheduled Date & Time</label>
-  <input type="datetime-local" name="s_date_time" required>
+  <label>Scheduled Date & Time</label><br>
+  <input type="datetime-local" name="s_date_time" required><br>
 
-  <button type="submit" name="save" class="add_btn">Save</button>
+  <button type="submit" name="save" class="btn">Save</button><br>
 
 </form>
-
+</div>
 </body>
 </html>
